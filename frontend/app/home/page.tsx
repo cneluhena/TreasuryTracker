@@ -1,6 +1,4 @@
 'use client'
-import { getCookie } from "cookies-next";
-import { cookies} from "next/headers";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -20,9 +18,8 @@ const HomePage = () =>{
 
     const fetchUserDetails = async () => {
         try {
-         
+          // Retrieve token from localStorage
           const token = localStorage.getItem('token');
-          
           if (!token) {
             throw new Error('No token found');
           }
@@ -39,7 +36,7 @@ const HomePage = () =>{
             const data = await response.json();
             setUserDetails(data); // Set user details in state
           } else {
-            router.push('/login')
+            router.push('/users')
             throw new Error('Failed to fetch user details');
           }
         } catch (error) {

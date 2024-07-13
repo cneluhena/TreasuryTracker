@@ -1,14 +1,15 @@
 const User = require('../models/user');
 const bcrypt = require('bcrypt');
+const { response } = require('express');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 const register = async (req, res, next)=>{
 try{
-    const {username, password} = req.body;
+    const {firstName, lastName, email, phoneNumber, username, password} = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);  //hashing password before saving to database
     const user = new User({
-        username, password: hashedPassword
+        username, password: hashedPassword, firstName, lastName, email, phoneNumber
     });
     await user.save();
     res.send('User registration successful!');
@@ -43,7 +44,8 @@ const login = async (req, res, next)=>{
         const token = jwt.sign({username: user.username}, process.env.SECRET_KEY, {expiresIn: '1h'}); 
         res.json({token});
         
-
+        
+        
     } catch{
 
         console.log('Error logging in');

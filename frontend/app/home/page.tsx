@@ -1,6 +1,7 @@
 'use client'
 import { getCookie } from "cookies-next";
 import { cookies} from "next/headers";
+
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -21,18 +22,17 @@ const HomePage = () =>{
     const fetchUserDetails = async () => {
         try {
          
-          const token = localStorage.getItem('token');
+          //const token = localStorage.getItem('token');
+       
           
-          if (!token) {
-            throw new Error('No token found');
-          }
+          
           // Send request to backend with token
           const response = await fetch('http://localhost:5000/user/profile', {
             method: 'GET',
             headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
             },
+            credentials: 'include',
           });
     
           if (response.ok) {

@@ -7,19 +7,25 @@ require('dotenv').config();
 const register = async (req, res, next)=>{
 try{
     const {firstName, lastName, email, phoneNumber, username, password} = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);  //hashing password before saving to database
+    const hashedPassword = await bcrypt.hash(password, 10); //hashing password before saving to database
+    const existUsername = await User.findOne({ username: req.body.username});
+    const existEmail = await User.findOne({email:req.body.email})
+    if (existUsername){
+        return res.status(409).send('Username already exists');
+    } else if (existEmail){
+        return res.status(409).send('Email already exists');
+    }
     const user = new User({
         username, password: hashedPassword, firstName, lastName, email, phoneNumber
     });
     await user.save();
-    res.send('User registration successful!');
+    res.status(200).send('User registration successful!');
 
 } catch{
     console.log('Error creating user');
     res.status(400).send('Error creating user');
 }
     
-
 };
 
 
@@ -42,8 +48,8 @@ const login = async (req, res, next)=>{
         }
 
         const token = jwt.sign({username: user.username}, process.env.SECRET_KEY, {expiresIn: '1h'}); 
-        res.json({token});
-        
+        res.cookie('token', token, { httpOnly: true, secure: false });
+        res.status(200).send("Success")
         
         
     } catch{

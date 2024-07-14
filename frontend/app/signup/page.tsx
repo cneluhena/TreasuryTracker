@@ -43,7 +43,9 @@ const SignupForm = () => {
   const [phoneErrorText, setPhoneErrorText] = useState("");
   const [userErrorText, setUserErrorText] = useState("");
   const [passErrorText, setPassErrorText] = useState("");
-
+  const [alreadyExists, setAlreadyExists] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  
   const [hasError, setHasError] = useState(false);
 
   const router = useRouter();
@@ -178,10 +180,26 @@ const SignupForm = () => {
         body: JSON.stringify({ username: username, password: password, firstName: firstName, lastName: lastName, email: email, phoneNumber: phoneNumber })
       });
 
-      if (!response.ok) {
-        
-        throw new Error("Error in registration");
+      if (response.status === 409) {
+        const data = await response.text();
+        if (data === 'Username already exists'){
+          setAlreadyExists(true);
+          setAlertMessage("Username already exists. Try a different username");
+          throw new Error("Username already exists");
+        } else if (data == 'Email already exists'){
+          setAlreadyExists(true);
+          setAlertMessage("Email already exists. Try a different email");
+          throw new Error("Email already exists");
+
+        }
+
       }
+      if (!response.ok) {
+         throw new Error("Error in registration");
+      }
+
+      router.push("/login");
+
 
 
     } catch (error: any) {
@@ -315,6 +333,11 @@ const SignupForm = () => {
       <Snackbar anchorOrigin = {{ vertical: 'bottom', horizontal: 'center' }} onClose={()=>{setHasError(false)}} open = {hasError} autoHideDuration={2000} >
         <Alert  variant="filled"  severity="error">
           Fill all the fields
+        </Alert>
+      </Snackbar>
+      <Snackbar anchorOrigin = {{ vertical: 'bottom', horizontal: 'center' }} onClose={()=>{setAlreadyExists(false)}} open = {alreadyExists} autoHideDuration={2000} >
+        <Alert  variant="filled"  severity="error">
+          {alertMessage}
         </Alert>
       </Snackbar>
     </Grid>

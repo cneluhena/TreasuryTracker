@@ -10,7 +10,7 @@ const addInvestment = async (req, res, next)=>{
     const user = req.user;
     
     const userId = user._id.toString(); 
-    console.log(userId); //getitng the user id as a string from the user
+    console.log(userId); //getting the user id as a string from the user
     const {investmentName, investmentType, investmentAmount, maturityPeriod, expectedReturn, investmentDate, maturityDate, interestRate} = req.body;
     const investment = new Investment({
         userId, investmentName, investmentType, investmentAmount, maturityPeriod, expectedReturn, investmentDate, maturityDate, interestRate
@@ -30,7 +30,8 @@ const addInvestment = async (req, res, next)=>{
 //getInvestments of a specific user
 const getInvestments = async(req, res, next) =>{
     try{
-        const user = req.user;  //getting the user containig in the token
+        const user = req.user;
+        console.log(user);  //getting the user containig in the token
         if (!user){
             return res.status(404).send("No user Found");
         }

@@ -59,8 +59,6 @@ const SignupForm = () => {
       //   throw new Error("Login failed!");
       // }
       
-
-
   
       router.push("/home");
     } catch (error: any) {

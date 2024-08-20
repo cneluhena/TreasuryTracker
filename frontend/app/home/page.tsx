@@ -1,6 +1,7 @@
 'use client'
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import AddInvestmentDialog from "../components/AddInvestment";
 
 interface UserDetails {
     username: string,
@@ -9,6 +10,7 @@ interface UserDetails {
 const HomePage = () => {
     const router = useRouter();
     const [userDetails, setUserDetails] = useState<UserDetails>();
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
         // Fetch user details when component mounts
@@ -87,7 +89,18 @@ const HomePage = () => {
                         Read More
                     </button>
                 </div>
+                
+
             </div>
+            <div className="p-6 pt-0 relative">
+    <button onClick={()=>setOpen(true)}
+        className="fixed top-0 right-0 align-middle select-none font-sans font-bold text-center uppercase transition-all disabled:opacity-50 disabled:shadow-none disabled:pointer-events-none text-xs py-3 px-6 rounded-lg bg-gray-900 text-white shadow-md shadow-gray-900/10 hover:shadow-lg hover:shadow-gray-900/20 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none"
+        type="button"
+        >
+        Add Investment
+    </button>
+    <AddInvestmentDialog open={open} onClose={()=>setOpen(false)}/>
+</div>
         </>
     );
 }

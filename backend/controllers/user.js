@@ -80,4 +80,27 @@ const profile = async (req, res, next) => {
   }
 };
 
-module.exports = { register, login, profile };
+const updateUserProfile = async (req, res, next) => {
+  try {
+    const { firstName, lastName, email, phoneNumber } = req.body;
+    const user = await User.findOne({ username: req.user.username });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // Update user profile fields
+    user.firstName = firstName || user.firstName;
+    user.lastName = lastName || user.lastName;
+    user.email = email || user.email;
+    user.phoneNumber = phoneNumber || user.phoneNumber;
+
+    await user.save(); // Save changes to the database
+    res.status(200).json({ message: "Profile updated successfully", user });
+  } catch (error) {
+    console.error("Error updating profile:", error);
+    res.status(500).json({ message: "Error updating profile" });
+  }
+};
+
+module.exports = { register, login, profile, updateUserProfile };

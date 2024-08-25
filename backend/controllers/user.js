@@ -80,11 +80,11 @@ const profile = async (req, res, next) => {
   }
 };
 
+
 const updateUserProfile = async (req, res, next) => {
   try {
     const { firstName, lastName, email, phoneNumber } = req.body;
     const user = await User.findOne({ username: req.user.username });
-
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
@@ -94,7 +94,6 @@ const updateUserProfile = async (req, res, next) => {
     user.lastName = lastName || user.lastName;
     user.email = email || user.email;
     user.phoneNumber = phoneNumber || user.phoneNumber;
-
     await user.save(); // Save changes to the database
     res.status(200).json({ message: "Profile updated successfully", user });
   } catch (error) {
@@ -103,4 +102,28 @@ const updateUserProfile = async (req, res, next) => {
   }
 };
 
-module.exports = { register, login, profile, updateUserProfile };
+const logout = async(req, res, next)=>{
+    try{
+
+        res.clearCookie('token');
+        res.status(200).send('logged out');
+    
+    } catch(error){
+        console.error(error);
+    }
+}
+
+const cookieCheck = async(req, res, next)=>{
+    try{
+        if (req.cookies.token){
+            res.status(200).send('logged');
+        } else{
+            res.send('Please Logged in');
+        }
+    } catch(error){
+        res.send(error);
+    }
+}
+
+
+module.exports = { register, login, profile, updateUserProfile, login, logout, cookieCheck };

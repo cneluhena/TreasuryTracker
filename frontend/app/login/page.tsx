@@ -13,9 +13,9 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
+import Cookies from 'js-cookie';
 
 
 const SignupForm = () => {
@@ -40,6 +40,7 @@ const SignupForm = () => {
 
   const handleSignIn = async () => {
     try {
+      
       const response = await fetch("http://localhost:5000/user/login", {
         method: "POST",
         headers: {
@@ -68,7 +69,29 @@ const SignupForm = () => {
     }
   };
 
+  //checking whether there is a cookie in the browser
+  const checkCookieExists = async() => {
+      const response = await fetch("http://localhost:5000/user/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"    
+        },
+        credentials: "include"
+      });
+
+      if (response.ok){
+        router.push('/home');
+      }
+  };
+
+
+  useEffect(()=>{
+      checkCookieExists()
+  }, [])
+
+  
   return (
+  
     <Grid
       container
       justifyContent="center"

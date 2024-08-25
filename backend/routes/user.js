@@ -3,10 +3,9 @@ const router = express.Router();
 
 const {
   register,
-  login,
   profile,
   updateUserProfile,
-  login, coockieCheck
+  login, cookieCheck, logout
 } = require("../controllers/user");
 const authenticate = require("../middlewares/auth");
 

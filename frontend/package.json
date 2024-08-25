@@ -15,7 +15,8 @@
     "@mui/material": "^5.16.7",
     "@mui/x-date-pickers": "^7.13.0",
     "apexcharts": "^3.52.0",
-    "chart.js": "^4.4.4",
+
+    "bootstrap": "^5.3.3",
     "cookies-next": "^4.2.1",
     "dayjs": "^1.11.12",
     "js-cookie": "^3.0.5",
@@ -23,6 +24,7 @@
     "next": "14.2.5",
     "react": "^18",
     "react-apexcharts": "^1.4.1",
+    "react-bootstrap": "^2.10.4",
     "react-dom": "^18",
     "react-hook-form": "^7.52.2"
   },

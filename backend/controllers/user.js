@@ -48,9 +48,8 @@ const login = async (req, res, next)=>{
         }
 
         const token = jwt.sign({username: user.username}, process.env.SECRET_KEY, {expiresIn: '1h'}); 
-        res.cookie('token', token, { httpOnly: true, secure: false });
+        res.cookie('token', token, { httpOnly: true, secure: false});
         res.status(200).send("Success")
-        
         
     } catch{
 
@@ -60,5 +59,29 @@ const login = async (req, res, next)=>{
 }
 
 
-module.exports = {register, login};
+const logout = async(req, res, next)=>{
+    try{
+
+        res.clearCookie('token');
+        res.status(200).send('logged out');
+    
+    } catch(error){
+        console.error(error);
+    }
+}
+
+const cookieCheck = async(req, res, next)=>{
+    try{
+        if (req.cookies.token){
+            res.status(200).send('logged');
+        } else{
+            res.send('Please Logged in');
+        }
+    } catch(error){
+        res.send(error);
+    }
+}
+
+
+module.exports = {register, login, logout, cookieCheck};
 

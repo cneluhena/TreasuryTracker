@@ -12,7 +12,7 @@ const investmentSchema = new mongoose.Schema({
     investmentType:{
         type: String,
         required: true, 
-        enum: ["Treasury Bills", "Trasury Bonds"]
+        enum: ["Treasury Bills", "Treasury Bonds"]
     },
     investmentAmount:{
         type: Number,

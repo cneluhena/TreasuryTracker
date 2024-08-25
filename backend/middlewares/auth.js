@@ -23,6 +23,7 @@ const authenticate = async(req, res, next)=>{
     
     } catch{
         res.clearCookie('token');
+        console.log(req.cookies.token)
         console.log('Error authenticating user');
     }
 }

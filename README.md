@@ -1,1 +1,1 @@
-##Treasuty Tracker
+## Treasury Tracker

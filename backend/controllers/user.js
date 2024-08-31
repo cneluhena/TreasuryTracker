@@ -68,6 +68,7 @@ const profile = async (req, res, next) => {
     if (!user) return res.status(404).json({ message: "User not found" });
 
     // Send profile data (excluding sensitive information like password)
+    console.log('Profile ot');
     res.json({
       username: user.username,
       firstName: user.firstName,

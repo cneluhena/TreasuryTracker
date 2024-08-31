@@ -22,7 +22,7 @@ const BChart = () => {
       
     },
     title: {
-      text: 'Monthly Profit this year', // Chart title // Title alignment
+      text: 'Monthly Profit in last year', // Chart title // Title alignment
       margin: 10, // Margin around the title
       offsetX: 0, // Horizontal offset
       offsetY: 0, // Vertical offset

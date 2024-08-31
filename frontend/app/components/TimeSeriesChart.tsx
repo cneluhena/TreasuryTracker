@@ -7,7 +7,8 @@ const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 interface Props{
   investmentType: string, 
-  period: string 
+  period: string, 
+  title: string
 }
 
 interface TypeObject {
@@ -19,7 +20,7 @@ interface SingleSeries{
   data: number[]
 }
 
-const TimeSeriesChart = ({investmentType, period}:Props) => {
+const TimeSeriesChart = ({investmentType, period, title}:Props) => {
   // const [isClient, setIsClient] = useState(false);
 
   const [selectedPeriod, setSelectedPeriod] = useState('');
@@ -27,9 +28,23 @@ const TimeSeriesChart = ({investmentType, period}:Props) => {
   const [series, setSeries] = useState<SingleSeries[]>([])
   const billSeries = 
   {
-    "3 months": [2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7], 
-    "6 months": [2.0, 2.1, 2.1, 2.2, 2.3, 2.4, 2.5],
-    "12 months": [1.9, 2.0, 2.0, 2.1, 2.1, 2.2, 2.3],
+    "3 months": [
+    11.06, 9.92, 9.81, 11.39, 9.81, 10.44, 10.47, 10.88, 9.53, 10.78, 10.15, 11.37
+  ], 
+    "6 months": [
+      2.0, 2.1, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 
+      2.9, 3.0, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 
+      3.9, 4.0, 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8, 
+      4.9, 5.0, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, 
+      5.9, 6.0, 6.1, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 6.8
+    ],
+    "12 months": [
+      1.9, 2.0, 2.0, 2.1, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 
+      2.7, 2.8, 2.9, 3.0, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 
+      3.7, 3.8, 3.9, 4.0, 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 
+      4.7, 4.8, 4.9, 5.0, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 
+      5.7, 5.8, 5.9, 6.0, 6.1, 6.2, 6.3, 6.4, 6.5, 6.6
+    ]
   }
 
 
@@ -40,7 +55,7 @@ const bondSeries = {
   //this is used to accomadate the changes of dropdown lists
   useEffect(()=>{
     let selectedData: TypeObject={};
-    console.log("This code is reachable");
+    
     if (investmentType == 'Treasury Bills'){
       selectedData = billSeries;
       
@@ -66,7 +81,7 @@ const bondSeries = {
           }
         },
     title: {
-      text: 'Interest Rates Over Time',
+      text: title,
       align: 'center',
       margin: 10,
       offsetX: 0,
@@ -81,14 +96,9 @@ const bondSeries = {
     xaxis: {
       type: 'datetime',
       categories: [
-        '2024-08-01',
-        '2024-08-02',
-        '2024-08-03',
-        '2024-08-04',
-        '2024-08-05',
-        '2024-08-06',
-        '2024-08-07',
-      ],
+    "2024/08/29", "2024/09/05", "2024/09/12", "2024/09/19", "2024/09/26", "2024/10/03",
+    "2024/10/10", "2024/10/17", "2024/10/24", "2024/10/31", "2024/11/07", "2024/11/14"
+  ]
     },
     yaxis: {
       title: {
@@ -97,45 +107,13 @@ const bondSeries = {
     },
     stroke: {
       curve: 'smooth',
-      width: 2,
+      width: 4,
     },
-    // grid: {
-    //   borderColor: '#e7e7e7',
-    //   row: {
-    //     colors: ['#f3f3f3', 'transparent'],
-    //     opacity: 0.5,
-    //   },
-    // },
+  
     
   };
 
 
-  //const series = [
-    // {
-    //   name: '3 Month',
-    //   data: [2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7],
-    // },
-    // {
-    //   name: '6 Month',
-    //   data: [2.0, 2.1, 2.1, 2.2, 2.3, 2.4, 2.5],
-    // },
-    // {
-    //   name: '12 Month',
-    //   data: [1.9, 2.0, 2.0, 2.1, 2.1, 2.2, 2.3],
-    // },
-    // {
-    //   name: '10 Year',
-    //   data: [1.8, 1.9, 1.9, 2.0, 2.0, 2.1, 2.2],
-    // },
-  //   {
-  //     name: investmentType,
-  //     data: selectedType['3 months']
-  //   }
-  // ];
-
-  // if (!isClient) {
-  //   return null; // Render nothing on the server
-  // }
 
   return (
     <Paper  sx={{borderRadius: '8px', p:2}}>

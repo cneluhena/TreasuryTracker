@@ -31,7 +31,10 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
 
   return (
     <Theme>
+      
+      <Box component="main" sx={{ marginTop: showToolbar ? "64px" : "0px" }}>
       {showToolbar && (
+        <>
         <Toolbar
           sx={{
             position: "fixed",
@@ -42,13 +45,13 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
             backgroundColor: "white", // Set background color to avoid transparency issues
           }}
         >
-          <MiniVariantDrawer />
           <Box sx={{ flexGrow: 1, marginRight: "10px" }} />
           <ProfileIcon name={userName} />
         </Toolbar>
+        <MiniVariantDrawer children={children}/>
+        </>
       )}
-      <Box component="main" sx={{ marginTop: showToolbar ? "64px" : "0px" }}>
-        {children}
+      {!showToolbar && <>{children}</>}
       </Box>
     </Theme>
   );

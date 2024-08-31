@@ -80,7 +80,7 @@ const CustomizedTables = ()=> {
   return (
 
 
-    <TableContainer component={Paper}>
+    <TableContainer component={Paper}sx={{padding:5}}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow>

@@ -15,6 +15,7 @@ import {
 import TimeSeriesChart from "../components/TimeSeriesChart";
 import { useState } from "react";
 import DropDown from "../components/DropDown";
+import ForecastTable from "../components/ForecastTable";
 
 interface UserDetails {
   username: string;
@@ -34,6 +35,11 @@ const History = () => {
     "6 years",
     "10 years",
   ];
+
+  const data = {
+
+  }
+
 
   const handleChange = (selectedValue: string) => {
     if (selectedValue === "Treasury Bills") {
@@ -66,13 +72,12 @@ const History = () => {
         </Grid>
       </Grid>
       {selectedType && selectedPeriod && (
-        <Grid container spacing={4} justifyContent="center" marginTop={1}>
-          <Grid item xs={6}>
-            <TimeSeriesChart
-              investmentType={selectedType}
-              period={selectedPeriod}
-              title="Interest rates over time"
-            />
+        <Grid container spacing={5}  padding={5}>
+          <Grid item xs={12} md={6} >
+            <ForecastTable investmentType={selectedType} period={selectedPeriod}/>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <TimeSeriesChart investmentType={selectedType} period={selectedPeriod} title="Predicted Interest Rates"/>
           </Grid>
         </Grid>
       )}

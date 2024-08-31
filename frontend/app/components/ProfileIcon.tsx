@@ -2,27 +2,23 @@
 import { AccountCircle } from "@mui/icons-material";
 import { Avatar, MenuItem } from "@mui/material";
 import Box from "@mui/material/Box";
-import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import Typography from "@mui/material/Typography";
 import { useState, MouseEvent } from "react";
-import { deepOrange, deepPurple } from "@mui/material/colors";
+import { deepOrange } from "@mui/material/colors";
 import { useRouter } from "next/navigation";
+import Cookies from 'js-cookie'
 
 interface Profile {
   name: string | undefined;
 }
+
 const ProfileIcon = ({ name }: Profile) => {
   const router = useRouter();
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const toggleDrawer = (status: boolean) => {
-    setDrawerOpen(status);
-  };
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
   const handleClick = (event: MouseEvent<HTMLElement>) => {
-    setDrawerOpen(true);
     setAnchorEl(event.currentTarget); // Set anchor element for Menu
   };
 
@@ -30,19 +26,16 @@ const ProfileIcon = ({ name }: Profile) => {
     setAnchorEl(null); // Close Menu
   };
 
-  //handling logout
+  // Handling logout
   const handleLogOut = async () => {
     const response = await fetch("http://localhost:5000/user/logout", {
       method: "POST",
       credentials: "include",
     });
-    console.log(response);
     if (response.ok) {
       router.push("/login");
     }
   };
-
-  
 
   return (
     <>
@@ -57,11 +50,9 @@ const ProfileIcon = ({ name }: Profile) => {
         <AccountCircle />
       </IconButton>
       <Menu
-        open={drawerOpen}
         anchorEl={anchorEl}
-        onClose={() => {
-          setDrawerOpen(false);
-        }}
+        open={Boolean(anchorEl)}
+        onClose={handleClose}
         slotProps={{
           paper: {
             sx: {
@@ -72,7 +63,7 @@ const ProfileIcon = ({ name }: Profile) => {
             },
           },
         }}
-        disableScrollLock // Close Menu
+        disableScrollLock
       >
         <Box
           display="flex"
@@ -80,13 +71,12 @@ const ProfileIcon = ({ name }: Profile) => {
           alignItems="center"
           flexDirection="column"
         >
-          <Avatar sx={{ bgcolor: deepOrange[500], margin: "15px" }}>N</Avatar>
+          <Avatar sx={{ bgcolor: deepOrange[500], margin: "15px" }}>CN</Avatar>
           <Typography sx={{ marginBottom: "15px" }}>{name}</Typography>
         </Box>
 
-        <MenuItem onClick = {()=>{router.push('/profile');handleClose();}}>Profile</MenuItem>
-        <MenuItem onClick={handleLogOut}>Logout</MenuItem>
-        {/* Add more menu items as needed */}
+        <MenuItem onClick={() => { handleClose(); router.push('/profile'); }}>Profile</MenuItem>
+        <MenuItem onClick={()=>{handleLogOut(); Cookies.remove('name', { path: '/'})}}>Logout</MenuItem>
       </Menu>
     </>
   );

@@ -20,6 +20,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PaidIcon from "@mui/icons-material/Paid";
 import HistoryIcon from '@mui/icons-material/History';
+import OnlinePredictionIcon from '@mui/icons-material/OnlinePrediction';
 
 
 import { styled } from '@mui/material/styles';
@@ -110,6 +111,19 @@ const MiniVariantDrawer: React.FC = () => {
               }}
             />
           </ListItemButton>
+          <ListItemButton>
+          <CustomListItemIcon>
+              <OnlinePredictionIcon />
+            </CustomListItemIcon>
+            <ListItemText
+              primary="Forecasts"
+              onClick={() => {
+                router.push("/forecasts");
+                handleDrawerClose();
+              }}
+            />
+          </ListItemButton>
+          
         </List>
       </Drawer>
       {/* <Box

@@ -67,7 +67,7 @@ const History = () => {
       </Grid>
       {selectedType && selectedPeriod && (
         <Grid container spacing={4} justifyContent="center" marginTop={1}>
-          <Grid item xs={6}>
+          <Grid item xs={12} md={6}>
             <TimeSeriesChart
               investmentType={selectedType}
               period={selectedPeriod}

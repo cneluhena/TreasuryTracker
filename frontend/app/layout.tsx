@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "./components/navbar";
 import { blueGrey } from "@mui/material/colors";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Theme from "@/app/assets/theme";

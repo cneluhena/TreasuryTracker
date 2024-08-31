@@ -1,139 +1,145 @@
-"use client";
-import React, { useState } from "react";
-import {
-  Drawer,
-  AppBar,
-  Toolbar,
-  IconButton,
-  Typography,
-  List,
-  ListItem,
-  ListItemText,
-  Box,
-  CssBaseline,
-  ListItemButton,
-  ListItemIcon,
-} from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+"use client"
+import * as React from 'react';
+import { styled, useTheme, Theme, CSSObject } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import MuiDrawer from '@mui/material/Drawer';
+import List from '@mui/material/List';
+import CssBaseline from '@mui/material/CssBaseline';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ListItemIcon from '@mui/material/ListItemIcon';
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import PaidIcon from "@mui/icons-material/Paid";
 import HistoryIcon from '@mui/icons-material/History';
 import OnlinePredictionIcon from '@mui/icons-material/OnlinePrediction';
 
 
-import { styled } from '@mui/material/styles';
+import { useRouter } from 'next/navigation';
+import SideBarItem from './SideBarItem';
 
+const drawerWidth = 220;
 
-import { useRouter } from "next/navigation";
-
-// Define the width of the drawer when expanded
-const drawerWidth = 240;
-
-const MiniVariantDrawer: React.FC = () => {
-  // State to control whether the drawer is open or closed
-  const [open, setOpen] = useState<boolean>(false);
-
-  // Function to handle opening the drawer
-  const handleDrawerOpen = () => setOpen(true);
-
-  // Function to handle closing the drawer
-  const handleDrawerClose = () => setOpen(false);
-  const router = useRouter(); // Use useRouter here
-  const CustomListItemIcon = styled(ListItemIcon)({
-    minWidth: '30px',  // Adjust the width as needed
-    marginRight: '8px', // Reduce the margin as needed
+const openedMixin = (theme: Theme): CSSObject => ({
+  width: drawerWidth,
+  transition: theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.enteringScreen,
+  }),
+  overflowX: 'hidden',
 });
 
+const closedMixin = (theme: Theme): CSSObject => ({
+  transition: theme.transitions.create('width', {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  overflowX: 'hidden',
+  width: `calc(${theme.spacing(8)})`,
+  [theme.breakpoints.up('sm')]: {
+    width: `calc(${theme.spacing(8)})`,
+  },
+});
+
+const DrawerHeader = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  padding: theme.spacing(0, 1.5),
+  justifyContent: 'flex-end',
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
+}));
+
+
+
+const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
+  ({ theme }) => ({
+    width: drawerWidth,
+    flexShrink: 0,
+    whiteSpace: 'nowrap',
+    boxSizing: 'border-box',
+    variants: [
+      {
+        props: ({ open }) => open,
+        style: {
+          ...openedMixin(theme),
+          '& .MuiDrawer-paper': openedMixin(theme),
+        },
+      },
+      {
+        props: ({ open }) => !open,
+        style: {
+          ...closedMixin(theme),
+          '& .MuiDrawer-paper': closedMixin(theme),
+        },
+      },
+    ],
+  }),
+);
+
+
+
+export default function MiniDrawer({ children }: { children: React.ReactNode }) {
+  const theme = useTheme();
+  const [open, setOpen] = React.useState(false);
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+  const router = useRouter(); // Use useRouter here
+
+
   return (
-    <>
+    <Box sx={{ display: 'flex' }}>
+       
       <CssBaseline />
-      <IconButton onClick={handleDrawerOpen}>
-        <MenuIcon />
-      </IconButton>
-      <Drawer
-        sx={{
-          width: drawerWidth,
-          flexShrink: 0,
-          "& .MuiDrawer-paper": {
-            width: drawerWidth,
-            boxSizing: "border-box",
-            borderRight: "none",
-          },
-        }}
-        variant="persistent"
-        anchor="left"
-        open={open}
-        onClose={() => {
-          setOpen(false);
-        }}
-      >
-        <Toolbar>
-          <IconButton onClick={handleDrawerClose}>
-            {open ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-          </IconButton>
-        </Toolbar>
+   
+
+      <Drawer variant="permanent" open={open}>
+
+        <DrawerHeader>
+      
+        {
+          open? <IconButton onClick={handleDrawerClose}>
+          <ChevronLeftIcon/>
+        </IconButton> : <IconButton onClick={handleDrawerOpen}>
+          <MenuIcon />
+        </IconButton>
+        }
+        
+        </DrawerHeader>
+        <Divider />
         <List>
-          <ListItemButton>
-            <CustomListItemIcon>
-              <DashboardIcon />
-            </CustomListItemIcon>
-            <ListItemText
-              primary="Dashboard"
-              onClick={() => {
-                router.push("/home");
-                handleDrawerClose();
-              }}
-            />
-          </ListItemButton>
-          <ListItemButton>
-            <CustomListItemIcon>
-              <PaidIcon/>
-            </CustomListItemIcon>
-            <ListItemText
-              primary="Investments"
-              onClick={() => {
-                router.push("/investments");
-                handleDrawerClose();
-              }}
-            />
-          </ListItemButton>
-          <ListItemButton>
-          <CustomListItemIcon>
-              <HistoryIcon />
-            </CustomListItemIcon>
-            <ListItemText
-              primary="Historical Data"
-              onClick={() => {
-                router.push("/history");
-                handleDrawerClose();
-              }}
-            />
-          </ListItemButton>
-          <ListItemButton>
-          <CustomListItemIcon>
-              <OnlinePredictionIcon />
-            </CustomListItemIcon>
-            <ListItemText
-              primary="Forecasts"
-              onClick={() => {
-                router.push("/forecasts");
-                handleDrawerClose();
-              }}
-            />
-          </ListItemButton>
+          <SideBarItem open={open} icon={<DashboardIcon/>} text='Dashboard' onClick={()=>{
+            router.push("/home");
+     
+          }} />
+          <SideBarItem open={open} icon={<PaidIcon/>} text='Investments' onClick={()=>{
+            router.push("/investments");
+        
+          }} />
+          <SideBarItem open={open} icon={<HistoryIcon/>} text='History' onClick={()=>{
+            router.push("/history");
+          
+          }} />
+           <SideBarItem open={open} icon={<OnlinePredictionIcon/>} text='Forecasts' onClick={()=>{
+            router.push("/forecasts");
+            
+          }} />
           
         </List>
-      </Drawer>
-      {/* <Box
-        component="main"
-        sx={{ flexGrow: 1, bgcolor: 'background.default', p: 3 }}
-      > */}
-      {/* <Toolbar sx={{ minHeight: 10 }} /> */}
-      {/* </Box> */}
-    </>
-  );
-};
+        
 
-export default MiniVariantDrawer;
+      </Drawer>
+      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+        
+        {children}
+      </Box>
+    </Box>
+  );
+}

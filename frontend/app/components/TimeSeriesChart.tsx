@@ -2,7 +2,7 @@
 import { Box, Paper } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
-
+import { ApexOptions } from "apexcharts";
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
 interface Props{
@@ -66,9 +66,9 @@ const bondSeries = {
   }, [investmentType, period])
   
   
-  const options = {
+  const options:ApexOptions = {
     chart: {
-          type: 'area',
+          type: "area",
           stacked: false,
           height: 350,
           zoom: {
@@ -78,7 +78,9 @@ const bondSeries = {
           },
           toolbar: {
             autoSelected: 'zoom'
-          }
+          },
+          
+        
         },
     title: {
       text: title,
@@ -106,7 +108,7 @@ const bondSeries = {
       },
     },
     stroke: {
-      curve: 'smooth',
+      curve: 'straight',
       width: 4,
     },
   

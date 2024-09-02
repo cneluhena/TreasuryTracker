@@ -48,7 +48,9 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
           <Box sx={{ flexGrow: 1, marginRight: "10px" }} />
           <ProfileIcon name={userName} />
         </Toolbar>
-        <MiniVariantDrawer children={children}/>
+        <MiniVariantDrawer>
+          {children}
+          </MiniVariantDrawer>
         </>
       )}
       {!showToolbar && <>{children}</>}

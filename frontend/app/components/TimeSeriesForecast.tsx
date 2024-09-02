@@ -9,10 +9,6 @@ interface Props{
   investmentType: string, 
   period: string, 
   title: string
-  data: {
-    Date: string, 
-    Price: number
-  }[];
 }
 
 interface TypeObject {
@@ -24,49 +20,36 @@ interface SingleSeries{
   data: number[]
 }
 
-const TimeSeriesChart = ({investmentType, period, title, data}:Props) => {
+const TimeSeriesForChart = ({investmentType, period, title}:Props) => {
   // const [isClient, setIsClient] = useState(false);
 
   const [selectedPeriod, setSelectedPeriod] = useState('');
   const [selectedType, setSelectedType] = useState<TypeObject>({});
   const [series, setSeries] = useState<SingleSeries[]>([])
-  const dates = data.map(record=> new Date(record.Date).toLocaleDateString());
-  const interests = data.map(record=>record.Price);
-  console.log(interests);
-  // const billSeries = 
-  // {
-  //   "3 months": [
-  //   11.06, 9.92, 9.81, 11.39, 9.81, 10.44, 10.47, 10.88, 9.53, 10.78, 10.15, 11.37
-  // ], 
-  //   "6 months": [
-  //     2.0, 2.1, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 
-  //     2.9, 3.0, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 
-  //     3.9, 4.0, 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8, 
-  //     4.9, 5.0, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, 
-  //     5.9, 6.0, 6.1, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 6.8
-  //   ],
-  //   "12 months": [
-  //     1.9, 2.0, 2.0, 2.1, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 
-  //     2.7, 2.8, 2.9, 3.0, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 
-  //     3.7, 3.8, 3.9, 4.0, 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 
-  //     4.7, 4.8, 4.9, 5.0, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 
-  //     5.7, 5.8, 5.9, 6.0, 6.1, 6.2, 6.3, 6.4, 6.5, 6.6
-  //   ]
-  // }
-   const billSeries = 
+  const billSeries = 
   {
-    "3 months": interests,
+    "3 months": [
+    11.06, 9.92, 9.81, 11.39, 9.81, 10.44, 10.47, 10.88, 9.53, 10.78, 10.15, 11.37
+  ], 
     "6 months": [
       2.0, 2.1, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 
-      2.9, 3.0],
+      2.9, 3.0, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.8, 
+      3.9, 4.0, 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8, 
+      4.9, 5.0, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 5.7, 5.8, 
+      5.9, 6.0, 6.1, 6.2, 6.3, 6.4, 6.5, 6.6, 6.7, 6.8
+    ],
     "12 months": [
       1.9, 2.0, 2.0, 2.1, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 
-      2.7, 2.8]
+      2.7, 2.8, 2.9, 3.0, 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 
+      3.7, 3.8, 3.9, 4.0, 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 
+      4.7, 4.8, 4.9, 5.0, 5.1, 5.2, 5.3, 5.4, 5.5, 5.6, 
+      5.7, 5.8, 5.9, 6.0, 6.1, 6.2, 6.3, 6.4, 6.5, 6.6
+    ]
   }
 
 
 const bondSeries = {
-  "10 years":  [1.8, 1.9, 1.9, 2.0, 2.0, 2.1, 2.2, 10, 10.2, 3, 2, 4]
+  "10 years":  [1.8, 1.9, 1.9, 2.0, 2.0, 2.1, 2.2]
 }
 
   //this is used to accomadate the changes of dropdown lists
@@ -114,7 +97,10 @@ const bondSeries = {
     },
     xaxis: {
       type: 'datetime',
-      categories: dates
+      categories: [
+    "2024/08/29", "2024/09/05", "2024/09/12", "2024/09/19", "2024/09/26", "2024/10/03",
+    "2024/10/10", "2024/10/17", "2024/10/24", "2024/10/31", "2024/11/07", "2024/11/14"
+  ]
     },
     yaxis: {
       title: {
@@ -145,4 +131,4 @@ const bondSeries = {
   );
 };
 
-export default TimeSeriesChart;
+export default TimeSeriesForChart;

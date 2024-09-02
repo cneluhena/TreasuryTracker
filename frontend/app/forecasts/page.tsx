@@ -16,6 +16,7 @@ import TimeSeriesChart from "../components/TimeSeriesChart";
 import { useState } from "react";
 import DropDown from "../components/DropDown";
 import ForecastTable from "../components/ForecastTable";
+import TimeSeriesForChart from "../components/TimeSeriesForecast";
 
 interface UserDetails {
   username: string;
@@ -77,7 +78,7 @@ const History = () => {
             <ForecastTable investmentType={selectedType} period={selectedPeriod}/>
           </Grid>
           <Grid item xs={12} md={6}>
-            <TimeSeriesChart investmentType={selectedType} period={selectedPeriod} title="Predicted Interest Rates"/>
+            <TimeSeriesForChart investmentType={selectedType} period={selectedPeriod} title="Predicted Interest Rates"/>
           </Grid>
         </Grid>
       )}

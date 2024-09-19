@@ -1,3 +1,4 @@
+import { Typography } from "@mui/material";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
@@ -21,6 +22,7 @@ const SideBarItem = ({open, icon, text,  onClick}:Props)=>{
                   {
                     minHeight: 48,
                     px: 2.5,
+                    flexDirection: open ? "row" : "column", 
                   },
                   open
                     ? {
@@ -48,16 +50,25 @@ const SideBarItem = ({open, icon, text,  onClick}:Props)=>{
                   ]}
                 >
                   {icon}
+                
                 </ListItemIcon>
                 <ListItemText
-                  primary={text}
+                  primary={<Typography
+                    variant="body1"
+                    sx={{
+                      fontSize: open ? "inherit" : "10px"
+                    }}
+                  >
+                    {text}
+                  </Typography>
+      }
                   sx={[
                     open
                       ? {
                           opacity: 1,
                         }
                       : {
-                          opacity: 0,
+                          opacity: 1,
                         },
                   ]}
                 />

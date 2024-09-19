@@ -79,8 +79,8 @@ const CustomizedTables = ()=> {
     }
   return (
 
-
-    <TableContainer component={Paper}sx={{padding:5}}>
+    <>
+        <TableContainer component={Paper} sx={{overflowX: "auto"}}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow>
@@ -115,7 +115,8 @@ const CustomizedTables = ()=> {
           ))}
         </TableBody>
       </Table>
-    </TableContainer>
+      </TableContainer>
+    </>
   );
 }
 

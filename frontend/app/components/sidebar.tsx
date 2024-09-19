@@ -113,7 +113,7 @@ export default function MiniDrawer({ children }: { children: React.ReactNode }) 
         }
         
         </DrawerHeader>
-        <Divider />
+       
         <List>
           <SideBarItem open={open} icon={<DashboardIcon/>} text='Dashboard' onClick={()=>{
             router.push("/home");
@@ -136,10 +136,9 @@ export default function MiniDrawer({ children }: { children: React.ReactNode }) 
         
 
       </Drawer>
-      <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         
         {children}
-      </Box>
+     
     </Box>
   );
 }

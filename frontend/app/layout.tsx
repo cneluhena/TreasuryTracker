@@ -28,18 +28,19 @@ export default function RootLayout({
 
  
     return (
-      <Theme>
-     <html lang="en">
-       <body className={inter.className}>
-              
-     <ClientLayout>
-           {children}
-           </ClientLayout>
-             
-           
-         </body>
-     </html>
-     </Theme>
+    
+      <html lang="en">
+        
+        <body className={inter.className}>
+        <ClientLayout>
+        
+            {children}
+            </ClientLayout>
+         
+        </body>
+       
+      </html>
+      
  
    );
   

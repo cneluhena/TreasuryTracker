@@ -8,6 +8,7 @@ import { usePathname } from "next/navigation";
 import Theme from "@/app/assets/theme";
 import { useEffect, useState } from "react";
 import Cookies from 'js-cookie';
+import Grid from "@mui/material/Grid";
 
 
 
@@ -32,27 +33,46 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
   return (
     <Theme>
       
-      <Box component="main" sx={{ marginTop: showToolbar ? "64px" : "0px" }}>
+      <Box component="main" sx={{ marginTop: showToolbar ? "64px" : "0px", overflowX:"hidden"}}>
+     
       {showToolbar && (
         <>
+        <header>
         <Toolbar
           sx={{
             position: "fixed",
             top: 0,
+            width:"100%",
             left: 0,
             right: 0,
+            justifyContent: "space-between",
             zIndex: 1100, // To ensure it stays on top
-            backgroundColor: "white", // Set background color to avoid transparency issues
+            backgroundColor: "white",
+            overflow: "hidden"
+                
+            
+           // Set background color to avoid transparency issues
           }}
+          
         >
           <Box sx={{ flexGrow: 1, marginRight: "10px" }} />
+          <Box sx={{ marginLeft: "auto" }}>
           <ProfileIcon name={userName} />
+          </Box>
         </Toolbar>
-        <MiniVariantDrawer children={children}/>
+        </header>
+       <MiniVariantDrawer >
+        <Box component="main" sx={{ flexGrow: 1, p: 2 , overflowX:"auto"}}>
+        
+        {children}
+      </Box>
+        </MiniVariantDrawer>
+  
         </>
       )}
       {!showToolbar && <>{children}</>}
       </Box>
+    
     </Theme>
   );
 }

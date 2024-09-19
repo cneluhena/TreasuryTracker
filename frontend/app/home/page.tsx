@@ -25,7 +25,7 @@ const HomePage = () => {
     // Simulate initial loading delay and fetch user details afterward
 
       fetchUserDetails();
-   // Cleanup timer on unmount
+ 
   }, []);
 
   const fetchUserDetails = async () => {
@@ -70,7 +70,7 @@ const HomePage = () => {
       ) : (
         <div>
           <Grid container spacing={4}>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid item xs={6} sm={6} md={4}>
               <StatCard
                 title={"This month investments"}
                 value={"50,000"}
@@ -78,7 +78,7 @@ const HomePage = () => {
                 comparison={"last month"}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid item xs={6} sm={6} md={4}>
               <StatCard
                 title={"Total investments"}
                 value={"100,000"}
@@ -86,7 +86,7 @@ const HomePage = () => {
                 comparison={"last month"}
               />
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid item xs={6} sm={6} md={4}>
               <StatCard
                 title={"Profit Last Year"}
                 value={"60,000"}

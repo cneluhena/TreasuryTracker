@@ -4,8 +4,7 @@ import axios from 'axios';
 
 
 interface Props {
-  investmentType: string;
-  period: string;
+  series: ForecastObject[]
 }
 
 interface ForecastObject{
@@ -14,7 +13,9 @@ interface ForecastObject{
    
 } 
 
-
+interface series {
+  [key: string]: ForecastObject[]; 
+}
 interface SingleSeries {
   name: string;
   data: ForecastObject;
@@ -25,27 +26,9 @@ interface TypeObject {
   [key: string]: ForecastObject[]; 
 }
 
-const ForecastTable = ({ investmentType, period }: Props) => {
-  const [series, setSeries] = useState<ForecastObject[]>([]);
+const ForecastTable = ({ series }: Props) => {
   
-  // Function to fetch predictions from Flask API
-  const fetchPredictions = async () => {
-    try {
-      const response = await axios.get('http://127.0.0.1:5000/predict'); // Adjust this URL to match your Flask server
-      setSeries(response.data.map((item: any) => ({
-        date: item.date,
-        interest: parseFloat(item.interest_rate).toFixed(3) // Assuming interest_rate is returned as a string
-      })));
-    } catch (error) {
-      console.error('Failed to fetch predictions:', error);
-    }
-  };
-
-  // Fetch data on component mount or when dependencies change
-  useEffect(() => {
-    fetchPredictions();
-  }, [investmentType, period]); // Re-fetch if these props change
-
+  // const [series, setSeries] = useState<ForecastObject[]>([]);
   return (
     <>
     <TableContainer component={Paper}>

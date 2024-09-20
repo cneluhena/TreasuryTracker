@@ -25,7 +25,6 @@ interface UserDetails {
 interface ForecastObject{
   date:string,
   interest:number
- 
 } 
 
 const Forecast = () => {
@@ -48,7 +47,25 @@ const Forecast = () => {
   }
 
 
+  const [series, setSeries] = useState<ForecastObject[]>([]);
   
+  // Function to fetch predictions from Flask API
+  const fetchPredictions = async () => {
+    try {
+      const response = await axios.get('http://127.0.0.1:5000/predict'); // Adjust this URL to match your Flask server
+      setSeries(response.data.map((item: any) => ({
+        date: item.date,
+        interest: parseFloat(item.interest).toFixed(3) // Assuming interest_rate is returned as a string
+      })));
+    } catch (error) {
+      console.error('Failed to fetch predictions:', error);
+    }
+  };
+
+  // Fetch data on component mount or when dependencies change
+  useEffect(() => {
+    fetchPredictions();
+  }, [selectedType, selectedPeriod]); // Re-fetch if these props change
 
   const handleChange = (selectedValue: string) => {
     if (selectedValue === "Treasury Bills") {
@@ -85,10 +102,10 @@ const Forecast = () => {
       {selectedType && selectedPeriod && (
         <Grid container spacing={5}  padding={5}>
           <Grid item xs={12} md={6} >
-            <ForecastTable investmentType={selectedType} period={selectedPeriod}/>
+            <ForecastTable series={series}/>
           </Grid>
           <Grid item xs={12} md={6}>
-            <TimeSeriesChart investmentType={selectedType} period={selectedPeriod} title="Predicted Interest Rates"/>
+            <TimeSeriesChart series={series} title="Predicted Interest Rates"/>
           </Grid>
         </Grid>
       )}

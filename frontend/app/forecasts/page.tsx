@@ -13,15 +13,22 @@ import {
   Typography,
 } from "@mui/material";
 import TimeSeriesChart from "../components/TimeSeriesChart";
-import { useState } from "react";
+import { useState ,useEffect} from "react";
 import DropDown from "../components/DropDown";
 import ForecastTable from "../components/ForecastTable";
+import axios from 'axios';
 
 interface UserDetails {
   username: string;
 }
 
-const History = () => {
+interface ForecastObject{
+  date:string,
+  interest:number
+ 
+} 
+
+const Forecast = () => {
   const [period, setPeriod] = useState<string[]>([]);
   const [selectedPeriod, setSelectedPeriod] = useState("");
   const treasuryType = ["Treasury Bills", "Treasury Bonds"];
@@ -41,6 +48,8 @@ const History = () => {
   }
 
 
+  
+
   const handleChange = (selectedValue: string) => {
     if (selectedValue === "Treasury Bills") {
       setPeriod(billTimePeriods);
@@ -54,6 +63,8 @@ const History = () => {
   const handlePeriodChange = (selectedValue: string) => {
     setSelectedPeriod(selectedValue);
   };
+
+  
 
   return (
     <>
@@ -85,4 +96,4 @@ const History = () => {
   );
 };
 
-export default History;
+export default Forecast;

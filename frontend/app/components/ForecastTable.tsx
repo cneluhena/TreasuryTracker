@@ -1,5 +1,7 @@
 import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
 import { useEffect, useState } from "react";
+import axios from 'axios';
+
 
 interface Props {
   investmentType: string;
@@ -25,40 +27,24 @@ interface TypeObject {
 
 const ForecastTable = ({ investmentType, period }: Props) => {
   const [series, setSeries] = useState<ForecastObject[]>([]);
-  const billSeries = {
-    "3 months": [
-    {"date": "2024/08/29", "interest": 11.06},
-    {"date": "2024/09/05", "interest": 9.92},
-    {"date": "2024/09/12", "interest": 9.81},
-    {"date": "2024/09/19", "interest": 11.39},
-    {"date": "2024/09/26", "interest": 9.81},
-    {"date": "2024/10/03", "interest": 10.44},
-    {"date": "2024/10/10", "interest": 10.47},
-    {"date": "2024/10/17", "interest": 10.88},
-    {"date": "2024/10/24", "interest": 9.53},
-    {"date": "2024/10/31", "interest": 10.78},
-    {"date": "2024/11/07", "interest": 10.15},
-    {"date": "2024/11/14", "interest": 11.37}
-  ],
-    "6 months": [{date: "2024/08/14", interest: 0.75}, {date: "2024/08/16", interest: 0.9}],
-    "12 months": [{date: "2024/08/14", interest: 0.9}, {date: "2024/08/14", interest: 0.95}]
-  };
-
-  const bondSeries = {
-    "10 years":  [{date: "2024/08/14", interest: 0.9}, {date: "2024/08/14", interest: 0.95}]
-  };
-
-  //this is used to accomadate the changes of dropdown lists
-  useEffect(() => {
-    let selectedData: TypeObject = {};
-
-    if (investmentType == "Treasury Bills") {
-      selectedData = billSeries;
-    } else if (investmentType == "Treasury Bonds") {
-      selectedData = bondSeries;
+  
+  // Function to fetch predictions from Flask API
+  const fetchPredictions = async () => {
+    try {
+      const response = await axios.get('http://127.0.0.1:5000/predict'); // Adjust this URL to match your Flask server
+      setSeries(response.data.map((item: any) => ({
+        date: item.date,
+        interest: parseFloat(item.interest_rate).toFixed(3) // Assuming interest_rate is returned as a string
+      })));
+    } catch (error) {
+      console.error('Failed to fetch predictions:', error);
     }
-    setSeries(selectedData[period]);
-  }, [investmentType, period]);
+  };
+
+  // Fetch data on component mount or when dependencies change
+  useEffect(() => {
+    fetchPredictions();
+  }, [investmentType, period]); // Re-fetch if these props change
 
   return (
     <>

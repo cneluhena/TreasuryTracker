@@ -14,7 +14,7 @@ import TextField from "@mui/material/TextField";
 import { useForm, Controller } from "react-hook-form";
 import { Dayjs } from 'dayjs';
 
-import Typography from "@mui/material/Typography";
+
 
 interface FormData {
   investmentName: string;
@@ -31,9 +31,10 @@ interface FormData {
 interface AddInvestmentDialogProps {
   open: boolean;
   onClose: () => void;
+  refreshPage: ()=> void;
 }
 
-const AddInvestmentDialog = ({ open, onClose }: AddInvestmentDialogProps) => {
+const AddInvestmentDialog = ({ open, onClose, refreshPage }: AddInvestmentDialogProps) => {
   
   const { handleSubmit, control, setValue } = useForm<FormData>({
     defaultValues: {
@@ -76,7 +77,8 @@ const AddInvestmentDialog = ({ open, onClose }: AddInvestmentDialogProps) => {
    
     
    
-    onClose(); // Close the dialog after submission
+    onClose();
+    refreshPage(); // Close the dialog after submission
   };
 
   return (

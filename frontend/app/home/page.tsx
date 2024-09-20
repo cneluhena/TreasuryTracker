@@ -29,6 +29,7 @@ const HomePage = () => {
   }, []);
 
   const fetchUserDetails = async () => {
+
     try {
       const response = await fetch("http://localhost:5000/user/profile", {
         method: "GET",
@@ -70,7 +71,7 @@ const HomePage = () => {
       ) : (
         <div>
           <Grid container spacing={4}>
-            <Grid item xs={6} sm={6} md={4}>
+            <Grid item xs={12} sm={6} md={4}>
               <StatCard
                 title={"This month investments"}
                 value={"50,000"}
@@ -78,7 +79,7 @@ const HomePage = () => {
                 comparison={"last month"}
               />
             </Grid>
-            <Grid item xs={6} sm={6} md={4}>
+            <Grid item xs={12} sm={6} md={4}>
               <StatCard
                 title={"Total investments"}
                 value={"100,000"}
@@ -86,7 +87,7 @@ const HomePage = () => {
                 comparison={"last month"}
               />
             </Grid>
-            <Grid item xs={6} sm={6} md={4}>
+            <Grid item xs={12} sm={6} md={4}>
               <StatCard
                 title={"Profit Last Year"}
                 value={"60,000"}
@@ -94,10 +95,10 @@ const HomePage = () => {
                 comparison={"last year"}
               />
             </Grid>
-            <AddInvestmentDialog open={open} onClose={() => setOpen(false)} />
+          
           </Grid>
 
-          <Grid container spacing={4} padding={4}>
+          <Grid container spacing={4} paddingTop={4}>
             <Grid item xs={12} md={6}>
               <BChart />
             </Grid>

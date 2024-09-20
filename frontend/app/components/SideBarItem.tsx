@@ -39,13 +39,14 @@ const SideBarItem = ({open, icon, text,  onClick}:Props)=>{
                     {
                       minWidth: 0,
                       justifyContent: 'center',
+                      alignItems: 'center'
                     },
                     open
                       ? {
                           mr: 3,
                         }
                       : {
-                          mr: 'auto',
+                          mr: '1',
                         },
                   ]}
                 >

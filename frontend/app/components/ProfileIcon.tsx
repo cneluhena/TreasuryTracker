@@ -71,7 +71,7 @@ const ProfileIcon = ({ name }: Profile) => {
           alignItems="center"
           flexDirection="column"
         >
-          <Avatar sx={{ bgcolor: deepOrange[500], margin: "15px" }}>{name.charAt(0)}</Avatar>
+          <Avatar sx={{ bgcolor: deepOrange[500], margin: "15px" }}>{name?.charAt(0)}</Avatar>
           <Typography sx={{ marginBottom: "15px" }}>{name}</Typography>
         </Box>
 

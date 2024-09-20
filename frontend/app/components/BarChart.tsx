@@ -50,26 +50,29 @@ const BChart = () => {
 
   if (typeof window !=="undefined"){
   return (
-    <Box gridColumn="span 6" display="flex" alignItems="center" justifyContent="center" padding={1} >
+
       
-                <Paper  sx={{width:"100%", height:"100%", p:2,borderRadius: '8px',display: 'flex', 
+  <Paper  sx={{width:"100%", height:"100%",p:2, borderRadius: '8px',display: 'flex', 
       alignItems: 'center', 
       justifyContent: 'center'}}>
 
-    <div className="app">
-      <div className="row">
-        <div className="mixed-chart">
+          <Box sx={{ width: '100%',  height: {
+              xs: '300px', // height for small screens (mobile)
+              sm: '400px', // height for tablets
+              md: '400px', // height for medium screens (desktop)
+              lg: '500px', // height for large screens
+            },}}>
           <Chart
             options={options}
             series={series}
             type="bar"
-            width="600"
+            width="100%"
+            height="100%"
           />
-        </div>
-      </div>
-    </div>
+          </Box>
+       
     </Paper>
-    </Box>
+  
   );
 }
 };

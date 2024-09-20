@@ -2,6 +2,7 @@
 
 import {
   Box,
+  CircularProgress,
   FormControl,
   Grid,
   IconButton,
@@ -13,7 +14,9 @@ import {
   Typography,
 } from "@mui/material";
 import TimeSeriesChart from "../components/TimeSeriesChart";
+
 import { useState, useEffect } from "react";
+
 import DropDown from "../components/DropDown";
 import axios from 'axios';
 
@@ -26,11 +29,16 @@ interface ForecastObject{
 } 
 
 
+
+
 const History = () => {
   const [period, setPeriod] = useState<string[]>([]);
   const [selectedPeriod, setSelectedPeriod] = useState("");
   const treasuryType = ["Treasury Bills", "Treasury Bonds"];
+ 
   const [selectedType, setSelectedType] = useState("");
+  const [interestData, setInterestData] = useState([]);
+  const [loading, setLoading] = useState(true);
   const billTimePeriods = ["3 months", "6 months", "12 months"];
   const bondTimePeriods = [
     "2 years",
@@ -40,6 +48,39 @@ const History = () => {
     "6 years",
     "10 years",
   ];
+
+
+  const getInterests = async () => {
+    try {
+      const response = await fetch("http://localhost:5000/interest/get", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        credentials: "include",
+      });
+      console.log(response);
+      if (!response.ok) {
+        console.log("sdfsfg")
+        throw new Error('Failed to fetch investments');
+
+      }
+  
+      const data = await response.json();
+      setInterestData(data);
+
+    } catch (error) {
+      console.error(error);
+    } finally{
+      setLoading(false);
+    }
+  };
+
+  
+  useEffect(()=>{
+    console.log("Readhciadfa");
+    getInterests();
+  }, [])
 
   const handleChange = (selectedValue: string) => {
     if (selectedValue === "Treasury Bills") {
@@ -76,7 +117,18 @@ const History = () => {
   }, [selectedType, selectedPeriod]);
 
   return (
-    <>
+    <>{
+      loading ? (<Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      ) : (
       <Grid container spacing={4}>
         <Grid item xs={12} container justifyContent="center">
           <DropDown
@@ -91,12 +143,15 @@ const History = () => {
           />
         </Grid>
       </Grid>
+      )
+}
       {selectedType && selectedPeriod && (
         <Grid container spacing={4} justifyContent="center" marginTop={1}>
           <Grid item xs={12} md={6}>
             <TimeSeriesChart
               series={series}
               title="Interest rates over time"
+              data = {interestData}
             />
           </Grid>
         </Grid>

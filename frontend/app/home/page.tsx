@@ -25,10 +25,11 @@ const HomePage = () => {
     // Simulate initial loading delay and fetch user details afterward
 
       fetchUserDetails();
-   // Cleanup timer on unmount
+ 
   }, []);
 
   const fetchUserDetails = async () => {
+
     try {
       const response = await fetch("http://localhost:5000/user/profile", {
         method: "GET",
@@ -94,10 +95,10 @@ const HomePage = () => {
                 comparison={"last year"}
               />
             </Grid>
-            <AddInvestmentDialog open={open} onClose={() => setOpen(false)} />
+          
           </Grid>
 
-          <Grid container spacing={4} padding={4}>
+          <Grid container spacing={4} paddingTop={4}>
             <Grid item xs={12} md={6}>
               <BChart />
             </Grid>

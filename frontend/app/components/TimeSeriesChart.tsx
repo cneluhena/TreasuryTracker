@@ -7,6 +7,7 @@ const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 interface Props {
   series: ForecastObject[];
   title: string;
+
 }
 
 interface ForecastObject {
@@ -17,15 +18,16 @@ interface ForecastObject {
 const TimeSeriesChart = ({ series, title }: Props) => {
   const [categories, setCategories] = useState<string[]>([]);
   const [dataPoints, setDataPoints] = useState<number[]>([]);
-
   useEffect(() => {
     // Transform the series data into the required format for the chart
     const dates = series.map((item) => item.date);
     const interestRates = series.map((item) => item.interest); // Assuming interest_rate is an array with one value
 
+
     setCategories(dates); // Dates for x-axis
     setDataPoints(interestRates); // Interest rates for y-axis
   }, [series]);
+
 
   const options: ApexOptions = {
     chart: {

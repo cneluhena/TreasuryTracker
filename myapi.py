@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from flask_cors import CORS  # Import CORS
+import json
 
 app = Flask(__name__)
 CORS(app)  # Apply CORS to the Flask app
@@ -49,6 +50,20 @@ def predict_future(model, data, time_step, future_steps):
 def get_predicts():
     return jsonify({'message': 'Welcome to the API'})
 
+@app.route('/history', methods=['GET'])
+def get_history():
+    result = [{'date': str(index.date()), 'interest': [row.Price]} for index, row in data.iterrows()]
+
+# Output the result
+    # print(result)
+
+    # Convert to JSON string (Optional: Pretty print the JSON)
+    json_output = jsonify(result)
+
+    # print(json_output)
+    return json_output
+
+
 # Define a POST route to accept input and provide predictions
 @app.route('/predict', methods=['GET'])
 def predict():
@@ -64,7 +79,7 @@ def predict():
         output_list = output.tolist()
         future_dates = pd.date_range(start=data.index[-1], periods=7 + 1, freq='W')[1:]
         future_dates = future_dates.strftime('%Y-%m-%d').tolist()
-        predictions_with_dates = [{'date': date, 'interest_rate': rate} for date, rate in zip(future_dates, output_list)]
+        predictions_with_dates = [{'date': date, 'interest': rate} for date, rate in zip(future_dates, output_list)]
         # Return the predictions as a JSON response
         return jsonify(predictions_with_dates)
 

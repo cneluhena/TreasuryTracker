@@ -29,6 +29,7 @@ const HomePage = () => {
   }, []);
 
   const fetchUserDetails = async () => {
+
     try {
       const response = await fetch("http://localhost:5000/user/profile", {
         method: "GET",
@@ -94,7 +95,7 @@ const HomePage = () => {
                 comparison={"last year"}
               />
             </Grid>
-            <AddInvestmentDialog open={open} onClose={() => setOpen(false)} />
+          
           </Grid>
 
           <Grid container spacing={4} paddingTop={4}>

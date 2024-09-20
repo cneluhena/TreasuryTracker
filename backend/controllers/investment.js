@@ -65,12 +65,12 @@ const getInvestments = async (req, res, next) => {
   }
 };
 
-const getFuturePredictions = async (req, res, next) => {
-  try {
-    const response = await axios.get("http://127.0.0.1:5000/predict");
-    return res.status(200).json(response.data);
-  } catch (error) {
-    return res.status(400).send("Error in getting future predictions");
-  }
-};
-module.exports = { addInvestment, getInvestments, getFuturePredictions };
+// const getFuturePredictions = async (req, res, next) => {
+//   try {
+//     const response = await axios.get("http://127.0.0.1:5000/predict");
+//     return res.status(200).json(response.data);
+//   } catch (error) {
+//     return res.status(400).send("Error in getting future predictions");
+//   }
+// };
+module.exports = { addInvestment, getInvestments };

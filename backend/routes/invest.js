@@ -11,5 +11,5 @@ const {
 
 router.post("/add", authenticate, addInvestment);
 router.get("/get", authenticate, getInvestments);
-router.get("/future", getFuturePredictions);
+// router.get("/predict", getFuturePredictions);
 module.exports = router;

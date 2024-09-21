@@ -16,7 +16,9 @@ import TimeSeriesChart from "../components/TimeSeriesChart";
 import { useState ,useEffect} from "react";
 import DropDown from "../components/DropDown";
 import ForecastTable from "../components/ForecastTable";
+
 import axios from 'axios';
+
 
 interface UserDetails {
   username: string;
@@ -105,7 +107,9 @@ const Forecast = () => {
             <ForecastTable series={series}/>
           </Grid>
           <Grid item xs={12} md={6}>
+
             <TimeSeriesChart series={series} title="Predicted Interest Rates"/>
+
           </Grid>
         </Grid>
       )}

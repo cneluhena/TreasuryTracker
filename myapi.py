@@ -10,7 +10,7 @@ app = Flask(__name__)
 CORS(app)  # Apply CORS to the Flask app
 
 # Load your pre-trained model
-model = load_model('model/Code/biLSTM.h5')
+model = load_model('model/Code/biLSTM_for_3months.keras')
 
 # Initialize the MinMaxScaler with the same range as used during training
 # scaler = MinMaxScaler(feature_range=(0,1))

@@ -18,7 +18,7 @@ import TimeSeriesChart from "../components/TimeSeriesChart";
 import { useState, useEffect } from "react";
 
 import DropDown from "../components/DropDown";
-import axios from 'axios';
+
 
 interface UserDetails {
   username: string;
@@ -101,8 +101,13 @@ const History = () => {
   // Function to fetch predictions from Flask API
   const fetchPredictions = async () => {
     try {
-      const response = await axios.get('http://127.0.0.1:5000/history'); // Adjust this URL to match your Flask server
-      setSeries(response.data.map((item: any) => ({
+      const response = await fetch('http://127.0.0.1:5000/history');
+      if (!response.ok){
+        throw new Error('Failed to fetch history');
+      } // Adjust this URL to match your Flask server
+
+      const data = await response.json();
+      setSeries(data.map((item: any) => ({
         date: item.date,
         interest: parseFloat(item.interest).toFixed(3) // Assuming interest_rate is returned as a string
       })));
@@ -151,7 +156,6 @@ const History = () => {
             <TimeSeriesChart
               series={series}
               title="Interest rates over time"
-              data = {interestData}
             />
           </Grid>
         </Grid>

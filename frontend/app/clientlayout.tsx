@@ -38,12 +38,17 @@ export default function ClientLayout({
   const noToolbarPaths = ["/login", "/signup"]; // Define paths where toolbar should be hidden
   const showToolbar = !noToolbarPaths.includes(pathname); // Determine whether to show the toolbar
   const userName = Cookies.get("name");
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm")); // Detect mobile screen size
-  const [open, setOpen] = useState(false); // Drawer open state
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const [open, setOpen] = useState(false);
+ // Drawer open state
+ const [mounted, setMounted] = useState(false); // Track when the component has mounted
+
   const handleDrawerToggle = () => {
     setOpen((prev) => !prev);
   };
-
+  useEffect(() => {
+    setMounted(true); // Set the mounted state to true after the first render
+  }, []);
   const DrawerHeader = styled("div")(({ theme }) => ({
     display: "flex",
     alignItems: "center",
@@ -60,6 +65,9 @@ export default function ClientLayout({
   const handleDrawerClose = () => {
     setOpen(false);
   };
+
+  
+ 
   const router = useRouter(); // Use useRouter here
 
   return (
@@ -68,7 +76,7 @@ export default function ClientLayout({
         component="main"
         sx={{ marginTop: showToolbar ? "64px" : "0px", overflowX: "hidden" }}
       >
-        {showToolbar && (
+        {showToolbar && mounted && (
           <>
             <header>
               <Toolbar
@@ -90,7 +98,7 @@ export default function ClientLayout({
                   <MenuIcon />
                 </IconButton>
 
-                {/* {isMobile && <DrawerComponent  variant="temporary" drawerOpen={true}/>} */}
+                {/*{isMobile && <DrawerComponent  variant="temporary" drawerOpen={true}/>} */}
 
                 <Box sx={{ flexGrow: 1, marginRight: "10px" }} />
                 <Box sx={{ marginLeft: "auto" }}>
@@ -121,13 +129,13 @@ export default function ClientLayout({
             )}
 
 
-            {/*following code is for bigger screens*/}
+           
             <MiniVariantDrawer open={open}>
               <Box
                 component="main"
                 sx={{ flexGrow: 1, p: 2, overflowX: "auto" }}
               >
-                {children}
+                {children} 
               </Box>
             </MiniVariantDrawer>
           </>

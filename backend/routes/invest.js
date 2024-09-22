@@ -7,9 +7,13 @@ const {
   addInvestment,
   getInvestments,
   getFuturePredictions,
+  getTotalInvestments, 
+  getTotalActiveInvestments
 } = require("../controllers/investment");
 
 router.post("/add", authenticate, addInvestment);
 router.get("/get", authenticate, getInvestments);
+router.get("/total", authenticate, getTotalInvestments)
+router.get("/active", authenticate, getTotalActiveInvestments);
 // router.get("/predict", getFuturePredictions);
 module.exports = router;

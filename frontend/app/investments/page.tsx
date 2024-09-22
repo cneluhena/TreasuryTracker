@@ -10,7 +10,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useState, useEffect } from "react";
 import AddInvestmentDialog from "../components/AddInvestment";
-import { Box, Button, CircularProgress } from "@mui/material";
+import { Box, Button, CircularProgress, Grid, TablePagination } from "@mui/material";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -51,6 +51,19 @@ const CustomizedTables = () => {
   const [error, setError] = useState("");
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+  
+  
+    const handleChangePage = (event: unknown, newPage: number) => {
+      setPage(newPage);
+    };
+  
+  
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setRowsPerPage(parseInt(event.target.value, 10));
+      setPage(0);
+    };
   const getUserInvestments = async () => {
     try {
       setLoading(true);
@@ -93,10 +106,17 @@ const CustomizedTables = () => {
   }
   return (
     <>
-      <Button variant="contained" onClick={handleButtonClick}>
+     <Grid container justifyContent="flex-end">
+            <Grid item paddingBottom={3}>
+            <Button variant="contained" onClick={handleButtonClick}>
         Add Investment
       </Button>
 
+           
+            </Grid>
+      </Grid>
+
+     
       <AddInvestmentDialog
         open={open}
         onClose={handleDialogClose}
@@ -133,7 +153,7 @@ const CustomizedTables = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {userInvestments?.map((investment) => (
+              {userInvestments?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((investment) => (
                 <StyledTableRow key={investment._id}>
                   <StyledTableCell component="th" scope="row">
                     {investment.investmentName}
@@ -163,6 +183,15 @@ const CustomizedTables = () => {
               ))}
             </TableBody>
           </Table>
+          <TablePagination
+          component="div"
+          count={userInvestments?.length}
+          page={page}
+          onPageChange={handleChangePage}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          rowsPerPageOptions={[5, 10, 25]}  // Options for rows per page
+      />
         </TableContainer>
       )}
     </>

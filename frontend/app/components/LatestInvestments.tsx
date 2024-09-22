@@ -8,6 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useEffect, useState } from 'react';
+import { TableFooter, TablePagination } from '@mui/material';
 
 
 
@@ -28,6 +29,22 @@ const BasicTable=()=> {
     
     const [userInvestments, setUserInvestments] = useState<UserInvestment[]|null>(null);
     const [error, setError] = useState('');
+    const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+  
+  
+    const handleChangePage = (event: unknown, newPage: number) => {
+      setPage(newPage);
+    };
+  
+  
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setRowsPerPage(parseInt(event.target.value, 10));
+      setPage(0);
+    };
+
+
+
     const getUserInvestments = async () => {
       try {
         const response = await fetch("http://localhost:5000/investment/get", {
@@ -59,7 +76,7 @@ const BasicTable=()=> {
       return <p>Error Occured</p>
     }
   return (
-    
+    <>
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
@@ -72,7 +89,7 @@ const BasicTable=()=> {
           </TableRow>
         </TableHead>
         <TableBody>
-          {userInvestments?.map((row) => (
+          {userInvestments?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
             <TableRow
               key={'dfsdf'}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -88,7 +105,20 @@ const BasicTable=()=> {
           ))}
         </TableBody>
       </Table>
+      <TablePagination
+          component="div"
+          count={userInvestments?.length}
+          page={page}
+          onPageChange={handleChangePage}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          rowsPerPageOptions={[5, 10, 25]}  // Options for rows per page
+      />
     </TableContainer>
+
+    
+    
+  </>
   );
 }
 

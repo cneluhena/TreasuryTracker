@@ -1,4 +1,4 @@
-# Dockerfile for Next.js Frontend
+# Dockerfile for Node.js Backend
 FROM node:18
 
 # Set the working directory
@@ -13,11 +13,8 @@ RUN npm install
 # Copy the rest of your application
 COPY . .
 
-# Build the Next.js app
-RUN npm run build
-
 # Expose the port
-EXPOSE 3000
+EXPOSE 5000
 
 # Start the app
-CMD ["npm", "start"]
+CMD ["npm", "run", "start"]

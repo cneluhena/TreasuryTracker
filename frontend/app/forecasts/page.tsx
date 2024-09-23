@@ -2,6 +2,7 @@
 
 import {
   Box,
+  CircularProgress,
   FormControl,
   Grid,
   IconButton,
@@ -13,20 +14,27 @@ import {
   Typography,
 } from "@mui/material";
 import TimeSeriesChart from "../components/TimeSeriesChart";
-import { useState } from "react";
+import { useState ,useEffect} from "react";
 import DropDown from "../components/DropDown";
 import ForecastTable from "../components/ForecastTable";
-import TimeSeriesForChart from "../components/TimeSeriesForecast";
+
+
 
 interface UserDetails {
   username: string;
 }
 
-const History = () => {
+interface ForecastObject{
+  date:string,
+  interest:number
+} 
+
+const Forecast = () => {
   const [period, setPeriod] = useState<string[]>([]);
   const [selectedPeriod, setSelectedPeriod] = useState("");
   const treasuryType = ["Treasury Bills", "Treasury Bonds"];
   const [selectedType, setSelectedType] = useState("");
+  const [loading, setLoading] = useState(false);
   const billTimePeriods = ["3 months", "6 months", "12 months"];
   const bondTimePeriods = [
     "2 years",
@@ -37,10 +45,35 @@ const History = () => {
     "10 years",
   ];
 
-  const data = {
+  const [series, setSeries] = useState<ForecastObject[]>([]);
+  
+  // Function to fetch predictions from Flask API
+  const fetchPredictions = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch('http://127.0.0.1:5000/predict', {
+        method: "GET"
+      })
+      if (!response.ok) {
+        throw new Error('Failed to fetch predictions');
 
-  }
+      }
+      const data = await response.json()
+      setSeries(data.map((item: any) => ({
+        date: item.date,
+        interest: parseFloat(item.interest).toFixed(3) // Assuming interest_rate is returned as a string
+      })));
+    } catch (error) {
+      console.error('Failed to fetch predictions:', error);
+    } finally{
+      setLoading(false);
+    }
+  };
 
+  // Fetch data on component mount or when dependencies change
+  useEffect(() => {
+    fetchPredictions();
+  }, [selectedType, selectedPeriod]); // Re-fetch if these props change
 
   const handleChange = (selectedValue: string) => {
     if (selectedValue === "Treasury Bills") {
@@ -55,6 +88,8 @@ const History = () => {
   const handlePeriodChange = (selectedValue: string) => {
     setSelectedPeriod(selectedValue);
   };
+
+  
 
   return (
     <>
@@ -72,18 +107,34 @@ const History = () => {
           />
         </Grid>
       </Grid>
-      {selectedType && selectedPeriod && (
+      {selectedPeriod && selectedType && (loading ?   (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "75vh",
+          }}
+        >
+          <CircularProgress />
+        </Box>
+
+        ):
+      (
         <Grid container spacing={5}  padding={5}>
           <Grid item xs={12} md={6} >
-            <ForecastTable investmentType={selectedType} period={selectedPeriod}/>
+            <ForecastTable series={series}/>
           </Grid>
           <Grid item xs={12} md={6}>
-            <TimeSeriesForChart investmentType={selectedType} period={selectedPeriod} title="Predicted Interest Rates"/>
+
+            <TimeSeriesChart series={series} title="Predicted Interest Rates"/>
+
           </Grid>
         </Grid>
-      )}
+      ))}
+      
     </>
   );
 };
 
-export default History;
+export default Forecast;

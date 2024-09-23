@@ -1,6 +1,7 @@
 const express = require('express');
 const userRoute = require('./routes/user');
 const investmentRoute = require('./routes/invest');
+const interestRoute = require('./routes/interest');
 
 const connectDB = require('./dbservice');
 const cors = require('cors');
@@ -18,6 +19,7 @@ app.use(express.json());
 
 app.use('/user', userRoute);
 app.use('/investment', investmentRoute);
+app.use('/interest', interestRoute);
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}` );

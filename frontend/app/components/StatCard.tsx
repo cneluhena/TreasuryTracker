@@ -16,11 +16,11 @@ const StatCard= ({title, value, trend, comparison}:StatCardProps)=>{
     return(
         <Box gridColumn="span 4" display="flex" alignItems="center" justifyContent="center">
                 <Paper  sx={{width:"100%", height:"100%", p:2,borderRadius: '8px' }}>
-                    <Typography>
+                    <Typography style={{ fontWeight: 'bold' }}>
                         {title}
                     </Typography>
                     
-                    <Typography sx={{ fontWeight: 'bold', fontSize:"32px"}}>
+                    <Typography sx={{ fontWeight: 'bold', fontSize:"26px"}}>
                         {value}
                     </Typography>
                    

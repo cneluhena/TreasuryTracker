@@ -1,14 +1,16 @@
-'use client'
-import * as React from 'react';
-import { styled } from '@mui/material/styles';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import { useState, useEffect } from 'react';
+"use client";
+import * as React from "react";
+import { styled } from "@mui/material/styles";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import { useState, useEffect } from "react";
+import AddInvestmentDialog from "../components/AddInvestment";
+import { Box, Button, CircularProgress, Grid, TablePagination } from "@mui/material";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -21,103 +23,179 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
+  "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
   // hide last border
-  '&:last-child td, &:last-child th': {
+  "&:last-child td, &:last-child th": {
     border: 0,
   },
 }));
 
+const CustomizedTables = () => {
+  interface UserInvestment {
+    _id: string;
+    investmentName: string;
+    investmentType: string;
+    investmentAmount: string;
+    maturityPeriod: number;
+    expectedReturn: number;
+    investmentDate: string;
+    maturityDate: string;
+    interestRate: number;
+  }
 
-
-const CustomizedTables = ()=> {
-    interface UserInvestment{
-        _id: string,
-        investmentName: string,
-        investmentType: string, 
-        investmentAmount: string,
-        maturityPeriod: number,
-        expectedReturn: number,
-        investmentDate: string,
-        maturityDate: string,
-        interestRate: number
-    
-    }
-    
-    const [userInvestments, setUserInvestments] = useState<UserInvestment[]|null>(null);
-    const [error, setError] = useState('');
-    const getUserInvestments = async () => {
-      try {
-        const response = await fetch("http://localhost:5000/investment/get", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json"
-          },
-          credentials: "include",
-        });
-    
-        if (!response.ok) {
-          throw new Error('Failed to fetch investments');
-        }
-    
-        const data: UserInvestment[] = await response.json();
-        setUserInvestments(data);
-        return data;
-      } catch (error) {
-        console.error(error);
-      }
+  const [userInvestments, setUserInvestments] = useState<
+    UserInvestment[] | null
+  >(null);
+  const [error, setError] = useState("");
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(0);
+    const [rowsPerPage, setRowsPerPage] = useState(5);
+  
+  
+    const handleChangePage = (event: unknown, newPage: number) => {
+      setPage(newPage);
     };
-    
-    useEffect(()=>{
-        getUserInvestments();
-    }, [])
-    
-    if (error){
-      return <p>Error Occured</p>
+  
+  
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+      setRowsPerPage(parseInt(event.target.value, 10));
+      setPage(0);
+    };
+  const getUserInvestments = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch("http://localhost:5000/investment/get", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch investments");
+      }
+
+      const data: UserInvestment[] = await response.json();
+      setUserInvestments(data);
+      return data;
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setLoading(false);
     }
+  };
+
+  const handleButtonClick = () => {
+    setOpen(true);
+  };
+
+  const handleDialogClose = () => {
+    setOpen(false);
+  };
+
+  useEffect(() => {
+    getUserInvestments();
+  }, []);
+
+  if (error) {
+    return <p>Error Occured</p>;
+  }
   return (
-
     <>
-        <TableContainer component={Paper} sx={{overflowX: "auto"}}>
-      <Table sx={{ minWidth: 700 }} aria-label="customized table">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>Investment Name</StyledTableCell>
-            <StyledTableCell align="right">Investment Type</StyledTableCell>
-            <StyledTableCell align="right">Investment Amount</StyledTableCell>
-            <StyledTableCell align="right">Maturity Period</StyledTableCell>
-            <StyledTableCell align="right">Expected Return</StyledTableCell>
-            <StyledTableCell align="right">Interest Rate</StyledTableCell>
-            <StyledTableCell align="right">Investment Date</StyledTableCell>
-            <StyledTableCell align="right">Maturity Date</StyledTableCell>
+     <Grid container justifyContent="flex-end">
+            <Grid item paddingBottom={3}>
+            <Button variant="contained" onClick={handleButtonClick}>
+        Add Investment
+      </Button>
 
-
-          </TableRow>
-        </TableHead>
-        <TableBody>
            
-          {userInvestments?.map((investment) => (
-            <StyledTableRow key={investment._id}>
-              <StyledTableCell component="th" scope="row">
-                {investment.investmentName}
-              </StyledTableCell>
-              <StyledTableCell align="right">{investment.investmentType}</StyledTableCell>
-              <StyledTableCell align="right">{investment.investmentAmount}</StyledTableCell>
-              <StyledTableCell align="right">{investment.maturityPeriod}</StyledTableCell>
-              <StyledTableCell align="right">{investment.expectedReturn}</StyledTableCell>
-              <StyledTableCell align="right">{investment.interestRate}</StyledTableCell>
-              <StyledTableCell align="right">{new Date(investment.investmentDate).toLocaleDateString()}</StyledTableCell>
-              <StyledTableCell align="right">{new Date(investment.maturityDate).toLocaleDateString()}</StyledTableCell>
+            </Grid>
+      </Grid>
 
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-      </TableContainer>
+     
+      <AddInvestmentDialog
+        open={open}
+        onClose={handleDialogClose}
+        refreshPage={getUserInvestments}
+      />
+
+      {loading ? (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height:'75vh'
+
+          }}
+        >
+          <CircularProgress />
+        </Box>
+      ) : (
+        <TableContainer component={Paper} sx={{ overflowX: "auto" }}>
+          <Table sx={{ minWidth: 700 }} aria-label="customized table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>Investment Name</StyledTableCell>
+                <StyledTableCell align="right">Investment Type</StyledTableCell>
+                <StyledTableCell align="right">
+                  Investment Amount
+                </StyledTableCell>
+                <StyledTableCell align="right">Maturity Period</StyledTableCell>
+                <StyledTableCell align="right">Expected Return</StyledTableCell>
+                <StyledTableCell align="right">Interest Rate</StyledTableCell>
+                <StyledTableCell align="right">Investment Date</StyledTableCell>
+                <StyledTableCell align="right">Maturity Date</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {userInvestments?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((investment) => (
+                <StyledTableRow key={investment._id}>
+                  <StyledTableCell component="th" scope="row">
+                    {investment.investmentName}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {investment.investmentType}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {investment.investmentAmount}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {investment.maturityPeriod}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {investment.expectedReturn}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {investment.interestRate}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {new Date(investment.investmentDate).toLocaleDateString()}
+                  </StyledTableCell>
+                  <StyledTableCell align="right">
+                    {new Date(investment.maturityDate).toLocaleDateString()}
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))}
+            </TableBody>
+          </Table>
+          <TablePagination
+          component="div"
+          count={userInvestments?.length}
+          page={page}
+          onPageChange={handleChangePage}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+          rowsPerPageOptions={[5, 10, 25]}  // Options for rows per page
+      />
+        </TableContainer>
+      )}
     </>
   );
-}
+};
 
 export default CustomizedTables;

@@ -14,12 +14,20 @@ import {
   Typography,
 } from "@mui/material";
 import TimeSeriesChart from "../components/TimeSeriesChart";
-import { useEffect, useState } from "react";
+
+import { useState, useEffect } from "react";
+
 import DropDown from "../components/DropDown";
+
 
 interface UserDetails {
   username: string;
 }
+interface ForecastObject{
+  date:string,
+  interest:number
+} 
+
 
 
 
@@ -88,6 +96,31 @@ const History = () => {
     setSelectedPeriod(selectedValue);
   };
 
+  const [series, setSeries] = useState<ForecastObject[]>([]);
+  
+  // Function to fetch predictions from Flask API
+  const fetchPredictions = async () => {
+    try {
+      const response = await fetch('http://127.0.0.1:5000/history');
+      if (!response.ok){
+        throw new Error('Failed to fetch history');
+      } // Adjust this URL to match your Flask server
+
+      const data = await response.json();
+      setSeries(data.map((item: any) => ({
+        date: item.date,
+        interest: parseFloat(item.interest).toFixed(3) // Assuming interest_rate is returned as a string
+      })));
+    } catch (error) {
+      console.error('Failed to fetch predictions:', error);
+    }
+  };
+
+  // Fetch data on component mount or when dependencies change
+  useEffect(() => {
+    fetchPredictions();
+  }, [selectedType, selectedPeriod]);
+
   return (
     <>{
       loading ? (<Box
@@ -121,10 +154,8 @@ const History = () => {
         <Grid container spacing={4} justifyContent="center" marginTop={1}>
           <Grid item xs={12} md={6}>
             <TimeSeriesChart
-              investmentType={selectedType}
-              period={selectedPeriod}
+              series={series}
               title="Interest rates over time"
-              data = {interestData}
             />
           </Grid>
         </Grid>

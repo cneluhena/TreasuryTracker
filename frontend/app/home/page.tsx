@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import AddInvestmentDialog from "../components/AddInvestment";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
-import { Grid, Paper } from "@mui/material";
+import { Grid, Paper, TablePagination } from "@mui/material";
 import StatCard from "../components/StatCard";
 import BChart from "../components/BarChart";
 import DChart from "../components/DonutChart";
@@ -20,15 +20,17 @@ const HomePage = () => {
   const [userDetails, setUserDetails] = useState<UserDetails | null>(null);
   const [loading, setLoading] = useState(true); // Single state to handle both initial and data loading
   const [open, setOpen] = useState(false);
+  const [total, setTotal] = useState(0);
+  const [activeTotal, setActiveTotal] = useState(0);
 
-  useEffect(() => {
-    // Simulate initial loading delay and fetch user details afterward
 
-      fetchUserDetails();
- 
-  }, []);
+  useEffect(()=>{
+       fetchDashboardDetails();
+    
+  }, [])
 
   const fetchUserDetails = async () => {
+
     try {
       const response = await fetch("http://localhost:5000/user/profile", {
         method: "GET",
@@ -49,10 +51,69 @@ const HomePage = () => {
     } catch (error) {
       router.push("/login");
       console.error("Error fetching user details:", error);
-    } finally {
-      setLoading(false); // Ensure loading is false after fetch
-    }
+    } 
   };
+
+  const getTotalInvestments = async ()=>{
+    try {
+      const response = await fetch("http://localhost:5000/investment/total", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setTotal(data);
+      } else {
+        router.push("/login");
+        throw new Error("Failed to fetch total investments");
+      }
+    } catch (error) {
+      router.push("/login");
+      console.error("Error fetching total investments", error);
+    } 
+  }
+
+  const getActiveInvestments = async ()=>{
+    try {
+      const response = await fetch("http://localhost:5000/investment/active", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setActiveTotal(data);
+      } else {
+        router.push("/login");
+        throw new Error("Failed to active investments");
+      }
+    } catch (error) {
+      router.push("/login");
+      console.error("Error fetching investment details:", error);
+    } 
+  }
+
+  const fetchDashboardDetails = async()=>{
+    try{
+      setLoading(true);
+      await getTotalInvestments();
+      await fetchUserDetails();
+      await getActiveInvestments()
+     
+    } catch(error){
+      throw new Error("Failed to fetch user details");
+    } finally{
+        setLoading(false);
+    }
+      
+  }
 
   return (
     <>
@@ -70,7 +131,7 @@ const HomePage = () => {
       ) : (
         <div>
           <Grid container spacing={4}>
-            <Grid item xs={6} sm={6} md={4}>
+            <Grid item xs={12} sm={6} md={4}>
               <StatCard
                 title={"This month investments"}
                 value={"50,000"}
@@ -78,26 +139,26 @@ const HomePage = () => {
                 comparison={"last month"}
               />
             </Grid>
-            <Grid item xs={6} sm={6} md={4}>
+            <Grid item xs={12} sm={6} md={4}>
               <StatCard
-                title={"Total investments"}
-                value={"100,000"}
+                title={"Total Investments"}
+                value={total.toLocaleString('en-US', { style: 'currency', currency: 'LKR' })}
                 trend={"error"}
                 comparison={"last month"}
               />
             </Grid>
-            <Grid item xs={6} sm={6} md={4}>
+            <Grid item xs={12} sm={6} md={4}>
               <StatCard
-                title={"Profit Last Year"}
-                value={"60,000"}
+                title={"Active Investments"}
+                value={activeTotal.toLocaleString('en-US', { style: 'currency', currency: 'LKR' })}
                 trend={"success"}
                 comparison={"last year"}
               />
             </Grid>
-            <AddInvestmentDialog open={open} onClose={() => setOpen(false)} />
+          
           </Grid>
 
-          <Grid container spacing={4} padding={4}>
+          <Grid container spacing={4} paddingTop={4}>
             <Grid item xs={12} md={6}>
               <BChart />
             </Grid>
@@ -119,6 +180,7 @@ const HomePage = () => {
                 }}
               >
                 <BasicTable />
+                  
               </Paper>
             </Grid>
           </Grid>

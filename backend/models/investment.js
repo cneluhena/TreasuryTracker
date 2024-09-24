@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+
 const investmentSchema = new mongoose.Schema({
     userId:{
         type: String,
@@ -45,8 +46,9 @@ const investmentSchema = new mongoose.Schema({
     
 );
 
-
 const Investment = mongoose.model('Investment', investmentSchema);
+//const Investment = connectDB.model('Investment', investmentSchema);
+
 
 
 module.exports = Investment;

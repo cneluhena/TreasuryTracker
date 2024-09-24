@@ -4,6 +4,7 @@ const investmentRoute = require('./routes/invest');
 const interestRoute = require('./routes/interest');
 
 const connectDB = require('./dbservice');
+
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 
@@ -12,8 +13,11 @@ app.use(cookieParser());
 app.use(cors({origin: 'http://localhost:3000',
     credentials: true}));
 const PORT = process.env.PORT || 5000;
+
+
 try{
     connectDB();
+   
 
 app.use(express.json());
 

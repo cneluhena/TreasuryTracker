@@ -1,6 +1,7 @@
 const Interest = require("../models/interests");
 const bcrypt = require("bcryptjs");
 const { response } = require("express");
+const mongoose = require("mongoose");
 
 const addInterest = async(req, res, next)=>{
     const date = req.body.date;

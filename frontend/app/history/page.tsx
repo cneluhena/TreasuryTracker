@@ -50,37 +50,34 @@ const History = () => {
   ];
 
 
-  const getInterests = async () => {
-    try {
-      const response = await fetch("http://localhost:5000/interest/get", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        credentials: "include",
-      });
-      console.log(response);
-      if (!response.ok) {
-        console.log("sdfsfg")
-        throw new Error('Failed to fetch investments');
+  // const getInterests = async () => {
+  //   try {
+  //     const response = await fetch("http://localhost:5000/interest/get", {
+  //       method: "GET",
+  //       headers: {
+  //         "Content-Type": "application/json"
+  //       },
+  //       credentials: "include",
+  //     });
+  //     console.log(response);
+  //     if (!response.ok) {
+  //       throw new Error('Failed to fetch investments');
 
-      }
+  //     }
   
-      const data = await response.json();
-      setInterestData(data);
+  //     const data = await response.json();
+  //     // setInterestData(data);
+  //     console.log(data);
 
-    } catch (error) {
-      console.error(error);
-    } finally{
-      setLoading(false);
-    }
-  };
+  //   } catch (error) {
+  //     console.error(error);
+  //   } finally{
+  //     setLoading(false);
+  //   }
+  // };
 
   
-  useEffect(()=>{
-    console.log("Readhciadfa");
-    getInterests();
-  }, [])
+  
 
   const handleChange = (selectedValue: string) => {
     if (selectedValue === "Treasury Bills") {
@@ -99,26 +96,47 @@ const History = () => {
   const [series, setSeries] = useState<ForecastObject[]>([]);
   
   // Function to fetch predictions from Flask API
-  const fetchPredictions = async () => {
+  // const fetchPredictions = async () => {
+  //   try {
+  //     const response = await fetch('http://127.0.0.1:5000/history');
+  //     if (!response.ok){
+  //       throw new Error('Failed to fetch history');
+  //     } // Adjust this URL to match your Flask server
+
+  //     const data = await response.json();
+  //     setSeries(data.map((item: any) => ({
+  //       date: item.date,
+  //       interest: parseFloat(item.interest).toFixed(3) // Assuming interest_rate is returned as a string
+  //     })));
+  //   } catch (error) {
+  //     console.error('Failed to fetch predictions:', error);
+  //   }
+  // };
+
+  const getHistory = async () => {
     try {
-      const response = await fetch('http://127.0.0.1:5000/history');
+      const response = await fetch('http://localhost:5000/interest/get');
       if (!response.ok){
         throw new Error('Failed to fetch history');
       } // Adjust this URL to match your Flask server
 
       const data = await response.json();
       setSeries(data.map((item: any) => ({
-        date: item.date,
-        interest: parseFloat(item.interest).toFixed(3) // Assuming interest_rate is returned as a string
-      })));
+              date: item.Date,
+              interest: item.Price // Assuming interest_rate is returned as a string
+            })));
+     
     } catch (error) {
+      
       console.error('Failed to fetch predictions:', error);
+    } finally{
+      setLoading(false)
     }
   };
 
   // Fetch data on component mount or when dependencies change
   useEffect(() => {
-    fetchPredictions();
+    getHistory();
   }, [selectedType, selectedPeriod]);
 
   return (

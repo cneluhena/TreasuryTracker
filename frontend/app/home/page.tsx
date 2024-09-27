@@ -32,7 +32,7 @@ const HomePage = () => {
   const fetchUserDetails = async () => {
 
     try {
-      const response = await fetch("http://localhost:5000/user/profile", {
+      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/user/profile", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -56,7 +56,7 @@ const HomePage = () => {
 
   const getTotalInvestments = async ()=>{
     try {
-      const response = await fetch("http://localhost:5000/investment/total", {
+      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/investment/total", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -79,7 +79,7 @@ const HomePage = () => {
 
   const getActiveInvestments = async ()=>{
     try {
-      const response = await fetch("http://localhost:5000/investment/active", {
+      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/investment/active", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

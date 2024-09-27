@@ -43,7 +43,7 @@ const SignupForm = () => {
 
   const fetchUserDetails = async () => {
     try {
-      const response = await fetch("http://localhost:5000/user/profile", {
+      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/user/profile", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -72,7 +72,7 @@ const SignupForm = () => {
   const handleSignIn = async () => {
     try {
       setLoadPage(true);
-      const response = await fetch("http://localhost:5000/user/login", {
+      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/user/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"    
@@ -115,7 +115,7 @@ const SignupForm = () => {
 
   //checking whether there is a cookie in the browser
   const checkCookieExists = async() => {
-      const response = await fetch("http://localhost:5000/user/", {
+      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/user/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"    

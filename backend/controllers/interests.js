@@ -41,6 +41,4 @@ const getLastTwelveRecords = async (req, res) => {
 
 
 
-module.exports = { addInterest, getLastTwelveRecords};
-
-
+module.exports = { addInterest, getLastTwelveRecords}

@@ -57,7 +57,7 @@ const SignupForm = () => {
         Cookies.set('name', data.firstName +' ' + data.lastName); // Set user details in state
       } else {
         router.push("/login");
-        throw new Error("Failed to fetch user details");
+        throw new Error("Failed to fetch user details"); 
       }
     } catch (error) {
       router.push("/login");

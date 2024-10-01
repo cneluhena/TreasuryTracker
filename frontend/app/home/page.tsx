@@ -68,11 +68,13 @@ const HomePage = () => {
         const data = await response.json();
         setTotal(data);
       } else {
-        router.push("/login");
+        //router.push("/login");
+        setTotal(0);
         throw new Error("Failed to fetch total investments");
       }
     } catch (error) {
-      router.push("/login");
+      setTotal(0);
+      //router.push("/login");
       console.error("Error fetching total investments", error);
     } 
   }
@@ -91,11 +93,13 @@ const HomePage = () => {
         const data = await response.json();
         setActiveTotal(data);
       } else {
-        router.push("/login");
+        //router.push("/login");
+        setActiveTotal(0);
+        console.log(0);
         throw new Error("Failed to active investments");
       }
     } catch (error) {
-      router.push("/login");
+      setActiveTotal(0)
       console.error("Error fetching investment details:", error);
     } 
   }

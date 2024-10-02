@@ -28,7 +28,7 @@ const ProfilePage = () => {
 
   const fetchUserDetails = async () => {
     try {
-      const response = await fetch("http://localhost:5000/user/profile", {
+      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/user/profile", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -64,7 +64,7 @@ const ProfilePage = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch("http://localhost:5000/user/profile", {
+      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/user/profile", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

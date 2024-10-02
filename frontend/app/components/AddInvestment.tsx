@@ -57,7 +57,7 @@ const AddInvestmentDialog = ({ open, onClose, refreshPage }: AddInvestmentDialog
     };
     console.log(JSON.stringify(formattedData));
     try{
-      const response = await  fetch('http://localhost:5000/investment/add ', {
+      const response = await  fetch(process.env.NEXT_PUBLIC_API_URL + '/investment/add ', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -32,7 +32,7 @@ const HomePage = () => {
   const fetchUserDetails = async () => {
 
     try {
-      const response = await fetch("http://localhost:5000/user/profile", {
+      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/user/profile", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -56,7 +56,7 @@ const HomePage = () => {
 
   const getTotalInvestments = async ()=>{
     try {
-      const response = await fetch("http://localhost:5000/investment/total", {
+      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/investment/total", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -68,18 +68,20 @@ const HomePage = () => {
         const data = await response.json();
         setTotal(data);
       } else {
-        router.push("/login");
+        //router.push("/login");
+        setTotal(0);
         throw new Error("Failed to fetch total investments");
       }
     } catch (error) {
-      router.push("/login");
+      setTotal(0);
+      //router.push("/login");
       console.error("Error fetching total investments", error);
     } 
   }
 
   const getActiveInvestments = async ()=>{
     try {
-      const response = await fetch("http://localhost:5000/investment/active", {
+      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/investment/active", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -91,11 +93,13 @@ const HomePage = () => {
         const data = await response.json();
         setActiveTotal(data);
       } else {
-        router.push("/login");
+        //router.push("/login");
+        setActiveTotal(0);
+        console.log(0);
         throw new Error("Failed to active investments");
       }
     } catch (error) {
-      router.push("/login");
+      setActiveTotal(0)
       console.error("Error fetching investment details:", error);
     } 
   }

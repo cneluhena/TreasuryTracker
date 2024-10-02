@@ -46,7 +46,7 @@ def predict_future(model, data, time_step, future_steps):
     
     return predictions
 
-@app.route('/api', methods=['GET'])
+@app.route('/', methods=['GET'])
 def get_predicts():
     return jsonify({'message': 'Welcome to the API'})
 

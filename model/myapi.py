@@ -10,12 +10,12 @@ app = Flask(__name__)
 CORS(app)  # Apply CORS to the Flask app
 
 # Load your pre-trained model
-model = load_model('../Code/biLSTM_for_3months.keras')
+model = load_model('./Code/biLSTM_for_3months.keras')
 
 # Initialize the MinMaxScaler with the same range as used during training
 # scaler = MinMaxScaler(feature_range=(0,1))
 
-data = pd.read_csv('../Data/3-Month 2009-2019.csv')
+data = pd.read_csv('./Data/3-Month 2009-2019.csv')
 data=data.iloc[::-1].reset_index(drop=True)
 
 data['Date'] = pd.to_datetime(data['Date'])

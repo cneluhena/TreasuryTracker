@@ -34,3 +34,18 @@ jobs:
       - name: Push the Model Docker image
         run: |
           docker push '${{secrets.DOCKER_LOGIN}}'/treasury-tracker-model:latest
+      
+      #SSH into EC2 and pull/run the Docker image
+      - name: Deploy on EC2
+        uses: appleboy/ssh-action@v0.1.4
+        with:
+          host: ${{secrets.EC2_HOST}}
+          username: ${{secrets.EC2_USER}}
+          key: ${{secrets.EC2_SSH_KEY}}
+          port: 22
+          script: |
+            docker login -u "${{secrets.DOCKER_LOGIN}}" -p "${{secrets.DOCKER_PASSWORD}}"
+            docker pull '${{secrets.DOCKER_LOGIN}}'/treasury-tracker-backend:latest
+            docker stop treasury-tracker-backend || true
+            docker rm treasury-tracker-backend || true
+            docker run -d --name treasury-tracker-backend -p 80:80 '${{secrets.DOCKER_LOGIN}}'/treasury-tracker-backend:latest

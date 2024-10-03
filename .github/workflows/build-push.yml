@@ -44,8 +44,12 @@ jobs:
           key: ${{secrets.EC2_SSH_KEY}}
           port: 22
           script: |
-            docker login -u "${{secrets.DOCKER_LOGIN}}" -p "${{secrets.DOCKER_PASSWORD}}"
-            docker pull '${{secrets.DOCKER_LOGIN}}'/treasury-tracker-backend:latest
-            docker stop treasury-tracker-backend || true
-            docker rm treasury-tracker-backend || true
-            docker run -d --name treasury-tracker-backend -p 80:80 '${{secrets.DOCKER_LOGIN}}'/treasury-tracker-backend:latest
+            sudo docker login -u "${{secrets.DOCKER_LOGIN}}" -p "${{secrets.DOCKER_PASSWORD}}"
+            sudo docker pull '${{secrets.DOCKER_LOGIN}}'/treasury-tracker-backend:latest
+            sudo docker pull '${{secrets.DOCKER_LOGIN}}'/treasury-tracker-model:latest
+            sudo docker stop treasury-tracker-backend || true
+            sudo docker rm treasury-tracker-backend || true
+            sudo docker stop treasury-tracker-model || true
+            sudo docker rm treasury-tracker-model || true
+            sudo docker run -d --name treasury-tracker-backend -p 5000:5000 '${{secrets.DOCKER_LOGIN}}'/treasury-tracker-backend:latest
+            sudo docker run -d --name treasury-tracker-model -p 5500:5000 '${{secrets.DOCKER_LOGIN}}'/treasury-tracker-backend:latest

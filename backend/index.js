@@ -21,6 +21,9 @@ try{
 
 app.use(express.json());
 
+app.use("/", (req, res) => {
+    res.send("Welcome to the Investment App");
+});
 app.use('/user', userRoute);
 app.use('/investment', investmentRoute);
 app.use('/interest', interestRoute);

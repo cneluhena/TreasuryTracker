@@ -21,12 +21,13 @@ try{
 
 app.use(express.json());
 
-app.use("/", (req, res) => {
-    res.json({ "message": "Welcome to the Investment App" });
-});
+
 app.use('/user', userRoute);
 app.use('/investment', investmentRoute);
 app.use('/interest', interestRoute);
+app.use("/", (req, res) => {
+    res.json({ "message": "Welcome to the Investment App" });
+});
 
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}` );

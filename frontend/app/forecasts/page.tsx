@@ -51,7 +51,7 @@ const Forecast = () => {
   const fetchPredictions = async () => {
     setLoading(true);
     try {
-      const response = await fetch(process.env.NEXT_PUBLIC_API_URL+'/predict', {
+      const response = await fetch(process.env.NEXT_PUBLIC_MODEL_URL+'/predict', {
         method: "GET"
       })
       if (!response.ok) {

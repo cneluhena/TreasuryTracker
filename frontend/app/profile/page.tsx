@@ -94,7 +94,7 @@ const ProfilePage = () => {
           {userDetails?.profileImage && (
             <div className="text-center mb-3">
               <img
-                src={`http://localhost:5000/uploads/${userDetails.profileImage}`}
+                src={process.env.NEXT_PUBLIC_API_URL+`/uploads/${userDetails.profileImage}`}
                 alt="Profile"
                 className="img-fluid rounded-circle"
                 style={{ width: "150px", height: "150px", objectFit: "cover" }}

@@ -4,14 +4,14 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from flask_cors import CORS  # Import CORS
-import json
+
 
 app = Flask(__name__)
 CORS(app)  # Apply CORS to the Flask app
 
-# Load your pre-trained model
-model = load_model('model/Code/biLSTM.h5')
 
+
+model = load_model('model/Code/biLSTM.h5')
 # Initialize the MinMaxScaler with the same range as used during training
 # scaler = MinMaxScaler(feature_range=(0,1))
 

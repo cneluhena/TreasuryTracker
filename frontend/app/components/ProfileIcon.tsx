@@ -28,7 +28,7 @@ const ProfileIcon = ({ name }: Profile) => {
 
   // Handling logout
   const handleLogOut = async () => {
-    const response = await fetch("http://localhost:5000/user/logout", {
+    const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/user/logout", {
       method: "POST",
       credentials: "include",
     });

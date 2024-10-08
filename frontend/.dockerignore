@@ -1,0 +1,25 @@
+# .dockerignore
+
+# Ignore node_modules as it will be installed in the Docker image
+node_modules
+npm-debug.log
+
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Ignore any log files
+logs
+*.log
+
+# Ignore build directories
+.next
+out
+dist
+
+# Ignore git-related files
+.git
+
+Dockerfile
+.dockerignore

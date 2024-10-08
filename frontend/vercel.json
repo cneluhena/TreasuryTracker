@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "http://54.211.71.61:5000/:path*"
+    },
+    {
+      "source": "/model/:path*",
+      "destination": "http://54.211.71.61:5500/:path*"
+    }
+  ]
+}

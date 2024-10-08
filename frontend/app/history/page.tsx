@@ -52,7 +52,7 @@ const History = () => {
 
   // const getInterests = async () => {
   //   try {
-  //     const response = await fetch("http://localhost:5000/interest/get", {
+  //     const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/interest/get", {
   //       method: "GET",
   //       headers: {
   //         "Content-Type": "application/json"
@@ -115,7 +115,7 @@ const History = () => {
 
   const getHistory = async () => {
     try {
-      const response = await fetch('http://localhost:5000/interest/get');
+      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/interest/get');
       if (!response.ok){
         throw new Error('Failed to fetch history');
       } // Adjust this URL to match your Flask server

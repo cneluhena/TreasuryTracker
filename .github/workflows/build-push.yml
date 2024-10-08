@@ -1,0 +1,80 @@
+name: Build and Deploy Docker Images
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout repository code
+      - uses: actions/checkout@v3
+
+      # Set up Docker Buildx
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      # Build the Model Docker image
+      - name: Build the Model Docker image
+        run: |
+          docker build -t '${{secrets.DOCKER_LOGIN}}'/treasury-tracker-model:latest ./model
+
+      # Build the Backend Docker image
+      - name: Build the Backend Docker image
+        run: |
+          docker build -t '${{secrets.DOCKER_LOGIN}}'/treasury-tracker-backend:latest ./backend
+
+      # Login to Docker Hub
+      - name: Login to Docker Hub
+        run: |
+          docker login --username '${{secrets.DOCKER_LOGIN}}' --password '${{secrets.DOCKER_PASSWORD}}'
+
+      # Push Backend Docker image to Docker Hub
+      - name: Push the Backend Docker image
+        run: |
+          docker push '${{secrets.DOCKER_LOGIN}}'/treasury-tracker-backend:latest
+
+      # Push Model Docker image to Docker Hub
+      - name: Push the Model Docker image
+        run: |
+          docker push '${{secrets.DOCKER_LOGIN}}'/treasury-tracker-model:latest
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      # Deploy to EC2
+      - name: Deploy on EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{secrets.EC2_HOST}}
+          username: ${{secrets.EC2_USER}}
+          key: ${{secrets.EC2_SSH_KEY}}
+          port: 22
+          script: |
+            # Login to Docker on EC2
+            sudo docker login -u "${{secrets.DOCKER_LOGIN}}" -p "${{secrets.DOCKER_PASSWORD}}"
+            
+            # Pull latest Docker images from Docker Hub
+            sudo docker pull '${{secrets.DOCKER_LOGIN}}'/treasury-tracker-backend:latest
+            sudo docker pull '${{secrets.DOCKER_LOGIN}}'/treasury-tracker-model:latest
+            
+            # Stop and remove existing containers (if they exist)
+            sudo docker stop treasury-tracker-backend || true
+            sudo docker rm treasury-tracker-backend || true
+            sudo docker stop treasury-tracker-model || true
+            sudo docker rm treasury-tracker-model || true
+            
+            # Run Backend container on port 5000
+            sudo docker run -d --name treasury-tracker-backend -p 5000:5000 '${{secrets.DOCKER_LOGIN}}'/treasury-tracker-backend:latest
+            sudo docker run -d --name treasury-tracker-backend \
+            -e SECRET_KEY=${{ secrets.SECRET_KEY }} \
+            -e PORT=${{ secrets.PORT }} \
+            -e DB_URL=${{ secrets.DB_URL }} \
+            -e DB_INTEREST_URL=${{ secrets.DB_INTEREST_URL }} \
+            -p 5000:5000 \
+            ${{ secrets.DOCKER_LOGIN }}/treasury-tracker-backend:latest
+
+            # Run Model container on port 5500
+            sudo docker run -d --name treasury-tracker-model -p 5500:5000 '${{secrets.DOCKER_LOGIN}}'/treasury-tracker-model:latest

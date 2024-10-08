@@ -56,7 +56,7 @@ const login = async (req, res, next) => {
     res.cookie("token", token, { httpOnly: true, secure: false });
     res.status(200).send("Success");
   } catch {
-    console.log("Error logging in");
+    console.log("Error logging in",error);
     res.status(400).send("Error logging in");
   }
 };
@@ -64,7 +64,7 @@ const login = async (req, res, next) => {
 const profile = async (req, res, next) => {
   try {
     const user = await User.findOne({ username: req.user.username });
-    console.log(user);
+    console.log(user,"profile eka");
     if (!user) return res.status(404).json({ message: "User not found" });
 
     // Send profile data (excluding sensitive information like password)

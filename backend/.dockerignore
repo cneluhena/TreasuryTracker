@@ -1,0 +1,20 @@
+node_modules
+npm-debug.log
+
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Ignore any log files
+logs
+*.log
+
+.next
+out
+dist
+
+.git
+
+Dockerfile
+.dockerignore

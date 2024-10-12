@@ -2,7 +2,7 @@ from flask import Flask, jsonify, request
 from flask_cors import CORS
 import pandas as pd
 
-from FinGuide.fin_guide_new import FinGuide
+from fin_guide_new import FinGuide
 
 app = Flask(__name__)
 CORS(app)
@@ -16,6 +16,10 @@ fin_guide.process_text(data)
 fin_guide.create_embeddings_and_index()
 fin_guide.setup_llm()
 fin_guide.setup_rag_chain()
+
+@app.route('/')
+def home():
+    return jsonify(message="Welcome to FinGuide API"), 200
 
 @app.route("/answer", methods=["POST"])
 def answer_question():

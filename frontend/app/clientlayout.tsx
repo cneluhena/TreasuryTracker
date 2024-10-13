@@ -35,7 +35,7 @@ export default function ClientLayout({
 }) {
   const theme = useTheme();
   const pathname = usePathname(); // Get the current path
-  const noToolbarPaths = ["/login", "/signup"]; // Define paths where toolbar should be hidden
+  const noToolbarPaths = ["/login", "/signup", "/reset-password", "/changePassword"]; // Define paths where toolbar should be hidden
   const showToolbar = !noToolbarPaths.includes(pathname); // Determine whether to show the toolbar
   const userName = Cookies.get("name");
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));

@@ -73,7 +73,7 @@ class FinGuide:
         )
 
     def answer_question(self, question: str) -> str:
-        return self.rag_chain.invoke(question)
+        return self.rag_chain.invoke(question).split("Answer:")[-1]
 
     def load_predicted_rates(self, file_path: str) -> pd.DataFrame:
         return pd.read_csv(file_path)

@@ -2,7 +2,7 @@ const express = require('express');
 const userRoute = require('./routes/user');
 const investmentRoute = require('./routes/invest');
 const interestRoute = require('./routes/interest');
-
+const passwordRoute = require('./routes/password');
 const connectDB = require('./dbservice');
 
 const cors = require('cors');
@@ -25,6 +25,7 @@ app.use(express.json());
 app.use('/user', userRoute);
 app.use('/investment', investmentRoute);
 app.use('/interest', interestRoute);
+app.use('/password', passwordRoute);
 // app.use("/", (req, res) => {
 //     res.json({ "message": "Welcome to the Investment App" });
 // });

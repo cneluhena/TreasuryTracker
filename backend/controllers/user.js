@@ -39,13 +39,13 @@ const login = async (req, res, next) => {
     const user = await User.findOne({ username });
     if (!user) {
       console.log("User Not Found");
-      return res.status(400).send("User Not Found");
+      return res.status(404).send("User Not Found");
     }
 
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
       console.log("Invalid Password");
-      return res.status(400).send("Invalid Password");
+      return res.status(404).send("Invalid Password");
     }
 
     const token = jwt.sign(
@@ -57,7 +57,7 @@ const login = async (req, res, next) => {
     res.status(200).send("Success");
   } catch {
     console.log("Error logging in",error);
-    res.status(400).send("Error logging in");
+    res.status(400).send("Error logging in with the username");
   }
 };
 
@@ -81,7 +81,7 @@ const profile = async (req, res, next) => {
   }
 };
 
-
+//update user profile
 const updateUserProfile = async (req, res, next) => {
   try {
     const { firstName, lastName, email, phoneNumber } = req.body;
@@ -103,6 +103,8 @@ const updateUserProfile = async (req, res, next) => {
   }
 };
 
+
+//logout
 const logout = async(req, res, next)=>{
     try{
 
@@ -113,6 +115,8 @@ const logout = async(req, res, next)=>{
         console.error(error);
     }
 }
+
+
 
 const cookieCheck = async(req, res, next)=>{
     try{

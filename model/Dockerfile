@@ -13,7 +13,7 @@ RUN pip install pandas
 RUN pip install scikit-learn
 
 COPY . .
-EXPOSE 5000
+EXPOSE 5500
 
 ENV FLASK_APP=myapi.py
 ENV FLASK_ENV=production

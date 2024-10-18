@@ -67,13 +67,13 @@ jobs:
             sudo docker rm treasury-tracker-model || true
             
             # Run Backend container on port 5000
-            sudo docker run -d --name treasury-tracker-backend \
-            -e SECRET_KEY=${{ secrets.SECRET_KEY }} \
-            -e PORT=${{ secrets.PORT }} \
-            -e DB_URL=${{ secrets.DB_URL }} \
-            -e DB_INTEREST_URL=${{ secrets.DB_INTEREST_URL }} \
-            -p 5000:5000 \
-            ${{ secrets.DOCKER_LOGIN }}/treasury-tracker-backend:latest
+            # sudo docker run -d --name treasury-tracker-backend \
+            # -e SECRET_KEY=${{ secrets.SECRET_KEY }} \
+            # -e PORT=${{ secrets.PORT }} \
+            # -e DB_URL=${{ secrets.DB_URL }} \
+            # -e DB_INTEREST_URL=${{ secrets.DB_INTEREST_URL }} \
+            # -p 5000:5000 \
+            # ${{ secrets.DOCKER_LOGIN }}/treasury-tracker-backend:latest
 
             # Run Model container on port 5500
             sudo docker run -d --name treasury-tracker-model -p 5500:5500 '${{secrets.DOCKER_LOGIN}}'/treasury-tracker-model:latest

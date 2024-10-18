@@ -10,7 +10,7 @@ const cookieParser = require('cookie-parser');
 
 const app =express()
 app.use(cookieParser());
-app.use(cors({origin: ['http://localhost:3000'],
+app.use(cors({origin: ['http://localhost:3000','https://treasury-tracker-frontend-bd1y8uk4w-cneluhenas-projects.vercel.app'],
     credentials: true}));
 const PORT = process.env.PORT || 5000;
 

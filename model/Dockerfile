@@ -18,5 +18,5 @@ EXPOSE 5500
 ENV FLASK_APP=myapi.py
 ENV FLASK_ENV=production
 
-CMD ["python3", "myapi.py"]
+CMD ["python", "myapi.py"]
 

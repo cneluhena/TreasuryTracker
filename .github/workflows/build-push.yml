@@ -76,4 +76,4 @@ jobs:
             # ${{ secrets.DOCKER_LOGIN }}/treasury-tracker-backend:latest
 
             # Run Model container on port 5500
-            sudo docker run -d --name treasury-tracker-model -p 5500:5500 '${{secrets.DOCKER_LOGIN}}'/treasury-tracker-model:latest
+            sudo docker run -d --name treasury-tracker-model -p 5000:5000 '${{secrets.DOCKER_LOGIN}}'/treasury-tracker-model:latest

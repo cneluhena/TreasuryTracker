@@ -4,18 +4,21 @@ import time
 import pandas as pd
 import numpy as np
 import faiss
-from typing import List
 
+from typing import List
+from dotenv import load_dotenv
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import UnstructuredURLLoader
-from langchain.vectorstores import FAISS
+#from langchain.vectorstores import FAISS
+from langchain_community.vectorstores import FAISS
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain.prompts import ChatPromptTemplate
 from langchain import HuggingFaceHub
 from langchain.schema.runnable import RunnablePassthrough
 from langchain.schema.output_parser import StrOutputParser
 
-HUGGING_FACE_API_KEY = os.getenv("HUGGING_FACE_API_KEY")
+load_dotenv()
+HUGGINGFACEHUB_API_TOKEN = os.getenv("HUGGING_FACE_API_KEY")
 
 class FinGuide:
     def __init__(self):
@@ -53,9 +56,9 @@ class FinGuide:
 
     def setup_llm(self):
         self.llm_model = HuggingFaceHub(
-            huggingfacehub_api_token=HUGGING_FACE_API_KEY,
-            repo_id='mistralai/Mistral-7B-Instruct-v0.1',
-            model_kwargs={"temperature": 1, 'max_length': 180}
+            huggingfacehub_api_token=HUGGINGFACEHUB_API_TOKEN,
+            repo_id='mistralai/Mistral-7B-Instruct-v0.2',
+            model_kwargs={"temperature": 0.9, 'max_length': 180}
         )
 
     def setup_rag_chain(self):

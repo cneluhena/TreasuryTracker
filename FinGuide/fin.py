@@ -64,7 +64,7 @@ def setup_langchain_components(docs):
     prompt = ChatPromptTemplate.from_template(template)
     
     llm_model = HuggingFaceHub(
-        huggingfacehub_api_token=HUGGINGFACE_API_TOKEN,
+        huggingfacehub_api_token="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",
         repo_id='mistralai/Mistral-7B-Instruct-v0.1',
         model_kwargs={"temperature": 1, 'max_length': 180}
     )

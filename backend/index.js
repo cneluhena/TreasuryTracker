@@ -13,7 +13,7 @@ app.use(cookieParser());
 
 // CORS configuration
 const corsOptions = {
-  origin: ['http://localhost:3000', 'https://treasury-tracker-frontend-bd1y8uk4w-cneluhenas-projects.vercel.app'],
+  origin: ['http://localhost:3000', 'https://treasury-tracker-frontend.vercel.app/'],
   credentials: true,  // Allow credentials (cookies, auth headers)
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],

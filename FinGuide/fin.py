@@ -16,7 +16,7 @@ from langchain.schema.runnable import RunnablePassthrough
 from langchain.schema.output_parser import StrOutputParser
 
 # Constants
-HUGGINGFACE_API_TOKEN = "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"
+HUGGINGFACE_API_TOKEN = os.getenv('HUGGING_FACE_API_KEY', 'your_default_api_key_here')
 URLS = [
     'https://www.cbsl.gov.lk/en/financial-system/financial-markets/government-securities-market',
     'https://www.sc.com/ke/investments/learn/understanding-bonds-for-beginners/',

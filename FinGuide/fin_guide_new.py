@@ -15,6 +15,8 @@ from langchain import HuggingFaceHub
 from langchain.schema.runnable import RunnablePassthrough
 from langchain.schema.output_parser import StrOutputParser
 
+HUGGING_FACE_API_KEY = os.getenv("HUGGING_FACE_API_KEY")
+
 class FinGuide:
     def __init__(self):
         self.urls = [
@@ -51,7 +53,7 @@ class FinGuide:
 
     def setup_llm(self):
         self.llm_model = HuggingFaceHub(
-            huggingfacehub_api_token="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",
+            huggingfacehub_api_token=HUGGING_FACE_API_KEY,
             repo_id='mistralai/Mistral-7B-Instruct-v0.1',
             model_kwargs={"temperature": 1, 'max_length': 180}
         )

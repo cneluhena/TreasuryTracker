@@ -151,6 +151,25 @@ const getThisMonthInvestments = async (req, res, next)=>{
 
 }
 
+
+const deleteInvestment = async(req, res, next)=>{
+  try{
+    const user = req.user;
+    if (!user){
+      return res.status(404).send("Not authorized");
+    }
+    const investmentId = await req.body.investmentId;
+    const result = await Investment.deleteOne({_id:investmentId, userId:user._id.toString()});
+    if (result.deletedCount > 0){
+      return res.status(200).send("Investment Deleted Successfully")
+    }
+  } catch(error){
+    return res.status(404).send("Error deleting Investment");
+  }
+    
+
+}
+
 // const getFuturePredictions = async (req, res, next) => {
 //   try {
 //     const response = await axios.get("http://127.0.0.1:5000/predict");
@@ -159,4 +178,6 @@ const getThisMonthInvestments = async (req, res, next)=>{
 //     return res.status(400).send("Error in getting future predictions");
 //   }
 // };
-module.exports = { addInvestment, getInvestments, getTotalInvestments, getTotalActiveInvestments,getThisMonthInvestments };
+
+
+module.exports = { addInvestment, getInvestments, getTotalInvestments, getTotalActiveInvestments,getThisMonthInvestments, deleteInvestment };

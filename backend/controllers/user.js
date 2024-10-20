@@ -64,12 +64,10 @@ const login = async (req, res, next) => {
 const profile = async (req, res, next) => {
   try {
     const user = await User.findOne({ username: req.user.username });
-    console.log(user,"profile eka");
     if (!user) return res.status(404).json({ message: "User not found" });
 
     // Send profile data (excluding sensitive information like password)
-    console.log('Profile ot');
-    res.json({
+    res.status(200).json({
       username: user.username,
       firstName: user.firstName,
       lastName: user.lastName,
@@ -107,7 +105,7 @@ const updateUserProfile = async (req, res, next) => {
 //logout
 const logout = async(req, res, next)=>{
     try{
-
+      
         res.clearCookie('token');
         res.status(200).send('logged out');
     
@@ -116,7 +114,10 @@ const logout = async(req, res, next)=>{
     }
 }
 
-
+//changing password
+const changePassword = async(req, res, next)=>{
+      
+}   
 
 const cookieCheck = async(req, res, next)=>{
     try{

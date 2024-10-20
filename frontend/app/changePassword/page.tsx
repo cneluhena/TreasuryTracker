@@ -55,10 +55,15 @@ const ResetForm = () => {
       if (response.ok) {
         console.log("Password Changed Successfully");
         setLoad(false);
+      } else{
+        const erroData = await response.json();
+        throw new Error(erroData.message);
       }
     } catch (error) {
-      setErrorMessage("Server Error");
+      setErrorMessage(error.message ||  "Sever Error");
+      setOpenDialog(false);
       setOpen(true);
+   
     }
   };
 

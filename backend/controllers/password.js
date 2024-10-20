@@ -45,8 +45,15 @@ const resetPassword = async(req, res, next) =>{
     const token = req.body.token;
     const newPassword = req.body.password;
     const passwordResetToken = await Token.findOne({userId})
+    if (!passwordResetToken){
+        const err = new Error("Link has expired. Try Again");
+        err.status = 403;
+        return next(err);
+    }
     if ((token || userId) === null){
-        return res.status(404).send("No UserId");
+        const err = new Error("No user");
+        err.status = 403;
+        return next(err);
     }
 
     const isValidToken = await bcrypt.compare(token, passwordResetToken.token);
@@ -58,7 +65,8 @@ const resetPassword = async(req, res, next) =>{
         }
         return res.status(404).send("Password Change not successful");
    
-    } return res.status(404).send("Token is not valid");
+    } 
+    return res.status(404).send("Token is not valid");
 
 }
 

@@ -11,7 +11,7 @@ import Stack from "@mui/material/Stack";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import TextField from "@mui/material/TextField";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller} from "react-hook-form";
 import { Dayjs } from 'dayjs';
 
 
@@ -32,11 +32,12 @@ interface AddInvestmentDialogProps {
   open: boolean;
   onClose: () => void;
   refreshPage: ()=> void;
+  errorHandle: (value:boolean)=> void
 }
 
-const AddInvestmentDialog = ({ open, onClose, refreshPage }: AddInvestmentDialogProps) => {
+const AddInvestmentDialog = ({ open, onClose, refreshPage, errorHandle }: AddInvestmentDialogProps) => {
   
-  const { handleSubmit, control, setValue } = useForm<FormData>({
+  const { handleSubmit, control, setValue, reset } = useForm<FormData>({
     defaultValues: {
       investmentName: '', // Initialize with an empty string
       investmentType: '',
@@ -48,6 +49,8 @@ const AddInvestmentDialog = ({ open, onClose, refreshPage }: AddInvestmentDialog
   maturityDate: null
     },
   });
+
+
   const onSubmit = async (data: FormData) => {
     
     const formattedData = {
@@ -55,7 +58,6 @@ const AddInvestmentDialog = ({ open, onClose, refreshPage }: AddInvestmentDialog
       investmentDate: data.investmentDate ? data.investmentDate.toISOString() : null,
       maturityDate: data.maturityDate ? data.maturityDate.toISOString() : null,
     };
-    console.log(JSON.stringify(formattedData));
     try{
       const response = await  fetch(process.env.NEXT_PUBLIC_API_URL + '/investment/add ', {
         method: 'POST',
@@ -69,16 +71,19 @@ const AddInvestmentDialog = ({ open, onClose, refreshPage }: AddInvestmentDialog
       if (!response.ok){
         throw new Error("Internal Error")
       } else{
-        console.log("Investment Succefully Added")
+        console.log("Investment Succefully Added");
+        errorHandle(false);
+        reset();
+        onClose();
+        refreshPage();
+      
       }
     } catch(error){
-        console.log(error)
+        errorHandle(true);
+        onClose();
+        reset();
     }
    
-    
-   
-    onClose();
-    refreshPage(); // Close the dialog after submission
   };
 
   return (
@@ -197,6 +202,7 @@ const AddInvestmentDialog = ({ open, onClose, refreshPage }: AddInvestmentDialog
         </form>
       </DialogContent>
     </Dialog>
+    
   );
 };
 

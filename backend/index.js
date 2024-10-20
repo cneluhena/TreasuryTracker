@@ -45,6 +45,9 @@ try {
 
 // General error handling middleware
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send('Something went wrong!');
+  const statusCode = err.statusCode || 500; // Default to 500 if no statusCode is set
+  const message = err.message || "An unexpected error occurred";
+  res.status(statusCode).json({
+    message: message,
+  });
 });

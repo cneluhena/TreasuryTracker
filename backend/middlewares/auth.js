@@ -18,9 +18,11 @@ const authenticate = async (req, res, next) => {
     }
     req.user = user;
     next();
-  } catch {
+  } catch(error) {
     res.clearCookie("token");
-    console.log("Error authenticating user");
+    const err = new Error("Aunthenticatoin Failed!");
+    err.status(401);
+    next(err);
   }
 };
 

@@ -6,6 +6,8 @@ import { IconButton } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import MenuIcon from "@mui/icons-material/Menu";
 import DrawerList from "./DrawerList";
+import { blueGrey, blue } from "@mui/material/colors";
+
 
 const drawerWidth = 200;
 
@@ -86,16 +88,22 @@ const DrawerComponent = ({ drawerOpen, variant }: Props) => {
 
 
   return (
-    <Drawer open={open} variant={variant} onClose={handleDrawerClose}>
+    <Drawer open={open} variant={variant} onClose={handleDrawerClose} sx={{
+      '& .MuiDrawer-paper': {
+        backgroundColor: blueGrey[800], // Change to your desired background color
+        color: '#ffffff', // Change the text color inside the drawer
+        boxShadow: '0px 4px 5px rgba(0, 0, 0, 0.5)', // Add shadow if needed
+      },
+    }}>
       <DrawerHeader sx={{paddingLeft:0, paddingRight:3}}>
         {open ? (
           <IconButton onClick={handleDrawerClose}>
-            <ChevronLeftIcon />
+            <ChevronLeftIcon color="secondary"/>
           </IconButton>
           
         ) : (
           <IconButton sx={{margin:0}}onClick={handleDrawerOpen}>
-            <MenuIcon />
+            <MenuIcon color="secondary"/>
           </IconButton>
         )}
       </DrawerHeader>

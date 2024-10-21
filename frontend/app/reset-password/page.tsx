@@ -68,6 +68,10 @@ const ResetForm = () => {
           setOpen(true);
         
           
+        } else if(response.status ==403){
+          setOpenDialog(false);
+          setErrorMessage("Error sending email");
+          setOpen(true);
         }
       } else{
         setLoad(false);

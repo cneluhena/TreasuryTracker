@@ -20,7 +20,7 @@ export default function MiniDrawer({ children, open}: Props) {
   const isMobile = useMediaQuery(theme.breakpoints.down('sm')); // Detect mobile screen size
   
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: 'flex'}}>
        
       <CssBaseline />
       {!isMobile && <DrawerComponent variant="permanent" drawerOpen={open}/>}

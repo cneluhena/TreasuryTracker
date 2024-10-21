@@ -17,7 +17,7 @@ import { ChangeEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from 'js-cookie';
 import Link from "next/link";
-
+import Theme from "@/app/assets/theme";
 
 
 const SignupForm = () => {
@@ -150,7 +150,7 @@ const SignupForm = () => {
       container
       justifyContent="center"
       alignItems="center"
-      style={{ height: "100vh" }}
+      style={{ height: "100vh", background:"#F5F5F7"}}
     >
       <Paper
         elevation={3}

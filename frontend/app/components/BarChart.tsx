@@ -52,7 +52,7 @@ const BChart = () => {
   return (
 
       
-  <Paper  sx={{width:"100%", height:"100%",p:2, borderRadius: '8px',display: 'flex', 
+  <Paper  elevation={0} variant="outlined" sx={{width:"100%", height:"100%",p:2, borderRadius: '8px',display: 'flex', 
       alignItems: 'center', 
       justifyContent: 'center'}}>
 

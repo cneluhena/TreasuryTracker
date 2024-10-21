@@ -9,6 +9,8 @@ import MiniVariantDrawer from "./components/sidebar";
 import ProfileIcon from "./components/ProfileIcon";
 import Box from "@mui/material/Box";
 
+
+
 import ClientLayout from "./clientlayout";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -32,10 +34,12 @@ export default function RootLayout({
       <html lang="en">
         
         <body className={inter.className}>
+          
         <ClientLayout>
         
             {children}
             </ClientLayout>
+            
          
         </body>
        

@@ -61,4 +61,32 @@ const answerQuestions = async (req, res) => {
   }
 };
 
-module.exports = { addInterest, getLastTwelveRecords, answerQuestions };
+const predict = async (req, res) => {
+  try {
+    const { period } = req.body;
+    if (!period) {
+      return res
+        .status(400)
+        .json({ error: "Please provide a period for prediction" });
+    }
+
+    const response = await axios.post("http://127.0.0.1:5000/predict", {
+      period,
+    });
+    const predictions = response.data;
+
+    return res.json(predictions);
+  } catch (error) {
+    console.error("Error in communicating with prediction API:", error);
+    return res
+      .status(500)
+      .json({ error: "Failed to get predictions from the Python API" });
+  }
+};
+
+module.exports = {
+  addInterest,
+  getLastTwelveRecords,
+  answerQuestions,
+  predict,
+};

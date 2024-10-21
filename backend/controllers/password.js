@@ -34,7 +34,7 @@ const requestResetPassword = async(req, res, next)=>{
             }
           
         ).catch(()=>{
-            return res.send("Error Occured")
+            return res.status(403).send("Error Occured")
         })
        
     }

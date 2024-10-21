@@ -2,7 +2,7 @@
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { Container, Typography, Button, Box, Grid,createTheme, ThemeProvider  } from '@mui/material';
-import { blueGrey } from "@mui/material/colors";
+import { blue, blueGrey, red } from "@mui/material/colors";
 import { useEffect } from "react";
 import { motion } from 'framer-motion';
 
@@ -33,8 +33,9 @@ const Home=()=>{
 
     <Box
     sx={{
-      backgroundColor: '#f5f5f5',
       minHeight: '100vh',
+      p:4,
+      bgcolor: "#FDFAF0",
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',

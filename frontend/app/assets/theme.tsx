@@ -1,5 +1,5 @@
 'use client'
-import { blueGrey } from "@mui/material/colors";
+import { blueGrey, blue } from "@mui/material/colors";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 const Theme = ({
@@ -11,7 +11,13 @@ const Theme = ({
         palette: {
           primary: {
             main: blueGrey[900],
-          }
+          },
+          secondary:{
+            main:"#ffffff"
+          },
+          background: {
+            default: "#F5F5F7", // Change this to your desired background color
+        },
           
         },
       });

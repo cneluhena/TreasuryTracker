@@ -14,10 +14,12 @@ import { Alert, Box, Button, CircularProgress, Grid, IconButton, Snackbar, Table
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteDialog from "../components/DeleteDialog";
+import { blueGrey, blue } from "@mui/material/colors";
+
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: blueGrey[900],
     color: theme.palette.common.white,
   },
   [`&.${tableCellClasses.body}`]: {

@@ -208,7 +208,7 @@ const SignupForm = () => {
       container
       justifyContent="center"
       alignItems="center"
-      style={{ height: "100vh" }}
+      style={{ height: "100vh", background:"#F5F5F7" }}
     >
       <Paper
         elevation={3}

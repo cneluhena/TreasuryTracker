@@ -122,6 +122,53 @@ const getTotalActiveInvestments = async (req, res, next)=>{
 }
 }
 
+const getThisMonthInvestments = async (req, res, next)=>{
+  const now = new Date();
+  const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1); // First day of the current month
+  const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0); // Last day of the current month
+
+  const investmentsThisMonth = await Investment.aggregate([
+    {
+      $match: {
+        userId: userId,
+        investmentDate: {
+          $gte: firstDayOfMonth, // Investment date is greater than or equal to the first day of the month
+          $lt: lastDayOfMonth // Investment date is less than the first day of next month (effectively the last day of the current month)
+        }
+      }
+    },
+    {
+      $group: {
+        _id: null,
+        amount: { $sum: "$investmentAmount" } // Sum up the investment amounts
+      }
+    }
+  ]);
+
+  const monthInvestmentAmount = investmentsThisMonth.length > 0 ? investmentsThisMonth[0].amount : 0;
+
+  return res.status(200).json(monthInvestmentAmount);
+
+}
+
+
+const deleteInvestment = async(req, res, next)=>{
+  try{
+    const user = req.user;
+    if (!user){
+      return res.status(404).send("Not authorized");
+    }
+    const investmentId = await req.body.investmentId;
+    const result = await Investment.deleteOne({_id:investmentId, userId:user._id.toString()});
+    if (result.deletedCount > 0){
+      return res.status(200).send("Investment Deleted Successfully")
+    }
+  } catch(error){
+    return res.status(404).send("Error deleting Investment");
+  }
+    
+
+}
 
 // const getFuturePredictions = async (req, res, next) => {
 //   try {
@@ -131,4 +178,6 @@ const getTotalActiveInvestments = async (req, res, next)=>{
 //     return res.status(400).send("Error in getting future predictions");
 //   }
 // };
-module.exports = { addInvestment, getInvestments, getTotalInvestments, getTotalActiveInvestments };
+
+
+module.exports = { addInvestment, getInvestments, getTotalInvestments, getTotalActiveInvestments,getThisMonthInvestments, deleteInvestment };

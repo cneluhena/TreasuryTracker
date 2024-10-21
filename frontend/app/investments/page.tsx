@@ -10,11 +10,16 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { useState, useEffect } from "react";
 import AddInvestmentDialog from "../components/AddInvestment";
-import { Box, Button, CircularProgress, Grid, TablePagination } from "@mui/material";
+import { Alert, Box, Button, CircularProgress, Grid, IconButton, Snackbar, TablePagination } from "@mui/material";
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteDialog from "../components/DeleteDialog";
+import { blueGrey, blue } from "@mui/material/colors";
+
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: blueGrey[900],
     color: theme.palette.common.white,
   },
   [`&.${tableCellClasses.body}`]: {
@@ -49,10 +54,13 @@ const CustomizedTables = () => {
     UserInvestment[] | null
   >(null);
   const [error, setError] = useState("");
+  const[isError,  setIsError] = useState<boolean|undefined>(undefined);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [openDelete, setOpenDelete] = useState(false);
+  const [delInvestmentId, setDelInvestmentId] = useState('');
+   const [rowsPerPage, setRowsPerPage] = useState(5);
   
   
     const handleChangePage = (event: unknown, newPage: number) => {
@@ -64,6 +72,19 @@ const CustomizedTables = () => {
       setRowsPerPage(parseInt(event.target.value, 10));
       setPage(0);
     };
+
+    const handleDelete = (invesetmentId: string)=>{
+      setOpenDelete(true);
+      setDelInvestmentId(invesetmentId);
+    }
+
+    const handleDeleteDialogClose = ()=>{
+      setOpenDelete(false);
+    }
+
+    
+
+
   const getUserInvestments = async () => {
     try {
       setLoading(true);
@@ -82,6 +103,8 @@ const CustomizedTables = () => {
       const data: UserInvestment[] = await response.json();
       setUserInvestments(data);
       return data;
+
+
     } catch (error) {
       console.error(error);
     } finally {
@@ -97,9 +120,15 @@ const CustomizedTables = () => {
     setOpen(false);
   };
 
+  const hasError = (value:boolean)=>{
+    setIsError(value);
+  }
+
   useEffect(() => {
     getUserInvestments();
   }, []);
+
+
 
   if (error) {
     return <p>Error Occured</p>;
@@ -121,8 +150,15 @@ const CustomizedTables = () => {
         open={open}
         onClose={handleDialogClose}
         refreshPage={getUserInvestments}
-      />
+        errorHandle={hasError}
 
+      />
+      <DeleteDialog open={openDelete} handleClose={handleDeleteDialogClose} investmentId = {delInvestmentId} refreshPage={getUserInvestments}/>
+      <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} onClose={() => setIsError(undefined)} open={isError !== undefined} autoHideDuration={2000}>
+        <Alert variant="filled" severity={isError? "error" :"success"}>
+          {isError ? " Investment Adding failed!" : "Investment Succesfully Added"}
+        </Alert>
+      </Snackbar>
       {loading ? (
         <Box
           sx={{
@@ -137,7 +173,7 @@ const CustomizedTables = () => {
         </Box>
       ) : (
         <TableContainer component={Paper} sx={{ overflowX: "auto" }}>
-          <Table sx={{ minWidth: 700 }} aria-label="customized table">
+          <Table sx={{ minWidth: 700 }} aria-label="customized table" >
             <TableHead>
               <TableRow>
                 <StyledTableCell>Investment Name</StyledTableCell>
@@ -150,6 +186,7 @@ const CustomizedTables = () => {
                 <StyledTableCell align="right">Interest Rate</StyledTableCell>
                 <StyledTableCell align="right">Investment Date</StyledTableCell>
                 <StyledTableCell align="right">Maturity Date</StyledTableCell>
+                <StyledTableCell align="right">Actions</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -179,6 +216,15 @@ const CustomizedTables = () => {
                   <StyledTableCell align="right">
                     {new Date(investment.maturityDate).toLocaleDateString()}
                   </StyledTableCell>
+                  <StyledTableCell align="right">
+                    <IconButton>
+                    <EditIcon/>
+
+                    </IconButton>
+                    <IconButton onClick={()=>handleDelete(investment._id)}>
+                    <DeleteIcon htmlColor="red"/>
+                    </IconButton>
+                  </StyledTableCell>
                 </StyledTableRow>
               ))}
             </TableBody>
@@ -193,6 +239,7 @@ const CustomizedTables = () => {
           rowsPerPageOptions={[5, 10, 25]}  // Options for rows per page
       />
         </TableContainer>
+        
       )}
     </>
   );

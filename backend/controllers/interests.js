@@ -24,7 +24,9 @@ const addInterest = async (req, res, next) => {
 
 const getLastTwelveRecords = async (req, res) => {
   try {
-    const lastTwelveRecords = await Interest.find()
+    const period = parseInt(req.query.period);
+    console.log(period);
+    const lastTwelveRecords = await Interest.find({ Period: period })
       .sort({ Date: -1 }) // Sort by Date in descending order
       .limit(12) // Limit to 12 records
       .exec();

@@ -16,7 +16,8 @@ import {
 import { ChangeEvent, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from 'js-cookie';
-
+import Link from "next/link";
+import Theme from "@/app/assets/theme";
 
 
 const SignupForm = () => {
@@ -25,6 +26,7 @@ const SignupForm = () => {
   const [loading, setLoading] = useState("");
   const [loadPage, setLoadPage] = useState(false);
   const [userDetails, setUserDetails] = useState({});
+  const [errorMessage, setErrorMessage] = useState('');
   
   const [open, setOpen] = useState(false);
   const router = useRouter();
@@ -84,6 +86,11 @@ const SignupForm = () => {
       
       
       if (!response.ok) {
+        console.log(response);
+        if (response.status == 404){
+          setErrorMessage("Invalid Username or Password");
+          setOpen(true);
+        }
         throw new Error("Invalid username or password");
       } else{
       
@@ -105,7 +112,10 @@ const SignupForm = () => {
 
   
     } catch (error: any) {
-      console.error("Error logging in:", error.message);
+      if (error.message === 'Failed to fetch'){
+        setErrorMessage("Server Error")
+      }
+      // console.error(error.message);
       setOpen(true);
       router.push('/login')
     } finally{
@@ -140,7 +150,7 @@ const SignupForm = () => {
       container
       justifyContent="center"
       alignItems="center"
-      style={{ height: "100vh" }}
+      style={{ height: "100vh", background:"#F5F5F7"}}
     >
       <Paper
         elevation={3}
@@ -158,7 +168,9 @@ const SignupForm = () => {
         <Typography variant="h5" component="div" gutterBottom  sx={{ 
             fontFamily: 'Arial, sans-serif', // Change to your desired font family
             fontSize: '24px', // Change to your desired font size
-            fontWeight: 'bold', // Change to your desired font weight
+            fontWeight: 'bold', paddingBottom: 2
+           
+          // Change to your desired font weight
           }}>
           Login
         </Typography>
@@ -191,15 +203,20 @@ const SignupForm = () => {
             <Button variant="contained" fullWidth onClick={handleSignIn}>
           Login
         </Button>
+      <Link href="/reset-password"><Typography component="span" sx={{fontWeight: 'bold', fontSize: 13, display: "block", textAlign: "right", paddingTop: 1}}>Forget Password</Typography></Link>
+           
+
+      <Typography sx={{fontSize: 15, paddingTop: 2}}>Don&apos;t have an account? <Link href="/signup"><Typography component="span" sx={{fontWeight: 'bold', fontSize: 15}}>Sign Up</Typography></Link></Typography>
         
           </Grid>
           </Grid>
+        
         </FormControl>
      
       </Paper>
       <Snackbar anchorOrigin = {{ vertical: 'bottom', horizontal: 'center' }} onClose={()=>{setOpen(false)}}open = {open} autoHideDuration={2000} >
         <Alert  variant="filled"  severity="error">
-          Invalid Credentials!
+          {errorMessage}
         </Alert>
       </Snackbar>
     </Grid>

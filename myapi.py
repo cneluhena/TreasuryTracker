@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 from flask_cors import CORS  # Import CORS
-import json
+
 
 app = Flask(__name__)
 CORS(app)  # Apply CORS to the Flask app

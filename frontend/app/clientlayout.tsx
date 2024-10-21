@@ -9,6 +9,8 @@ import Theme from "@/app/assets/theme";
 import { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import Grid from "@mui/material/Grid";
+import { blueGrey, blue } from "@mui/material/colors";
+
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import {
@@ -35,7 +37,7 @@ export default function ClientLayout({
 }) {
   const theme = useTheme();
   const pathname = usePathname(); // Get the current path
-  const noToolbarPaths = ["/login", "/signup"]; // Define paths where toolbar should be hidden
+  const noToolbarPaths = ["/", "/login", "/signup", "/reset-password", "/changePassword"]; // Define paths where toolbar should be hidden
   const showToolbar = !noToolbarPaths.includes(pathname); // Determine whether to show the toolbar
   const userName = Cookies.get("name");
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -88,7 +90,7 @@ export default function ClientLayout({
                   right: 0,
                   justifyContent: "space-between",
                   zIndex: 1100,
-                  backgroundColor: "white",
+                  backgroundColor: "#F5F5F7",
                   overflow: "hidden",
 
                   // Set background color to avoid transparency issues
@@ -112,6 +114,13 @@ export default function ClientLayout({
                 open={open}
                 variant="temporary"
                 onClose={handleDrawerClose}
+                sx={{
+                  '& .MuiDrawer-paper': {
+                    backgroundColor: blueGrey[800], // Change to your desired background color
+                    color: '#ffffff', // Change the text color inside the drawer
+                    boxShadow: '0px 4px 5px rgba(0, 0, 0, 0.5)', // Add shadow if needed
+                  },
+                }}
               >
                 <DrawerHeader>
                   {open ? (
@@ -133,7 +142,7 @@ export default function ClientLayout({
             <MiniVariantDrawer open={open}>
               <Box
                 component="main"
-                sx={{ flexGrow: 1, p: 2, overflowX: "auto" }}
+                sx={{ flexGrow: 1, p: 2, overflowX: "auto"}}
               >
                 {children} 
               </Box>

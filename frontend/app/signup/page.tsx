@@ -37,6 +37,7 @@ const SignupForm = () => {
   const [phoneError, setPhoneError] = useState(false);
   const [userError, setUserError] = useState(false);
   const [passError, setPassError] = useState(false);
+  const [serverErrorMessage, setServerErrorMessage]  = useState("");
 
   const [firstErrorText, setFirstErrorText] = useState("");
   const [lastErrorText, setlastErrorText] = useState("");
@@ -46,6 +47,8 @@ const SignupForm = () => {
   const [passErrorText, setPassErrorText] = useState("");
   const [alreadyExists, setAlreadyExists] = useState(false);
   const [alertMessage, setAlertMessage] = useState("");
+  const [hasServerError, setHasServerError] = useState(false);
+
 
   const [hasError, setHasError] = useState(false);
 
@@ -189,10 +192,12 @@ const SignupForm = () => {
         if (!response.ok) {
           throw new Error("Error in registration");
         }
-
         router.push("/login");
       } catch (error: any) {
-        console.error("Error logging in:", error.message);
+        if (error.message === 'Failed to fetch'){
+          setHasServerError(true);
+          setServerErrorMessage("Server Error")
+        }
         setOpen(true);
       }
     }
@@ -203,7 +208,7 @@ const SignupForm = () => {
       container
       justifyContent="center"
       alignItems="center"
-      style={{ height: "100vh" }}
+      style={{ height: "100vh", background:"#F5F5F7" }}
     >
       <Paper
         elevation={3}
@@ -341,6 +346,18 @@ const SignupForm = () => {
       >
         <Alert variant="filled" severity="error">
           {alertMessage}
+        </Alert>
+      </Snackbar>
+      <Snackbar
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        onClose={() => {
+          setHasServerError(false);
+        }}
+        open={hasServerError}
+        autoHideDuration={2000}
+      >
+        <Alert variant="filled" severity="error">
+          {serverErrorMessage}
         </Alert>
       </Snackbar>
     </Grid>

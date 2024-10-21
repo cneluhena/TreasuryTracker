@@ -14,8 +14,9 @@ interface StatCardProps {
 
 const StatCard= ({title, value, trend, comparison}:StatCardProps)=>{
     return(
+        
         <Box gridColumn="span 4" display="flex" alignItems="center" justifyContent="center">
-                <Paper  sx={{width:"100%", height:"100%", p:2,borderRadius: '8px' }}>
+                <Paper  variant="outlined" elevation={0.85} sx={{width:"100%", height:"100%", p:2,borderRadius: '8px' }}>
                     <Typography style={{ fontWeight: 'bold' }}>
                         {title}
                     </Typography>

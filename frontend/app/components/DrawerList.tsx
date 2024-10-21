@@ -24,25 +24,25 @@ const DrawerList = ({ open, onClick}: Props) => {
     <List>
       <SideBarItem
         open={open}
-        icon={<DashboardIcon />}
+        icon={<DashboardIcon color="secondary"/>}
         text="Dashboard"
         onClick={() => {
           handleClick("/home")
         }}
+        
       />
       <SideBarItem
         open={open}
-        icon={<PaidIcon />}
+        icon={<PaidIcon color="secondary" />}
         text="Investments"
         onClick={() => {
           handleClick("/investments")
-
-          
         }}
+        
       />
       <SideBarItem
         open={open}
-        icon={<HistoryIcon />}
+        icon={<HistoryIcon color="secondary"/>}
         text="History"
         onClick={() => {
           handleClick("/history")
@@ -51,7 +51,7 @@ const DrawerList = ({ open, onClick}: Props) => {
       />
       <SideBarItem
         open={open}
-        icon={<OnlinePredictionIcon />}
+        icon={<OnlinePredictionIcon color="secondary"/>}
         text="Forecasts"
         onClick={() => {
           handleClick("/forecasts")

@@ -16,7 +16,10 @@ interface Props{
 const SideBarItem = ({open, icon, text,  onClick}:Props)=>{
    
     return (
-        <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+        <ListItem key={text} disablePadding sx={{ display: 'block' ,"&:hover": {
+            backgroundColor: "#b0bec5",
+            color: "#1976d2",
+          },}}>
               <ListItemButton
                 sx={[
                   {

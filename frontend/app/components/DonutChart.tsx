@@ -37,7 +37,7 @@ const DChart = () => {
   return (
    
     <Box gridColumn="span 6"  display="flex" alignItems="center" justifyContent="center" padding={1}>
-       <Paper  sx={{width:"100%", height:"75%", p:2,borderRadius: '8px', display:"flex", justifyContent:"center"}}>
+       <Paper  elevation={0} variant="outlined" sx={{width:"100%", height:"75%", p:2,borderRadius: '8px', display:"flex", justifyContent:"center"}}>
     
       <Chart
         series={options.series}

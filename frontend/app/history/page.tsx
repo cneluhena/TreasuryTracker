@@ -49,6 +49,11 @@ const History = () => {
     "10 years",
   ];
 
+  const periodMap = {
+    "3 months": 3, 
+    "6 months": 6, 
+    "12 months" : 12
+  }
 
   // const getInterests = async () => {
   //   try {
@@ -113,13 +118,14 @@ const History = () => {
   //   }
   // };
 
-  const getHistory = async () => {
+  const getHistory = async (time:number) => {
     try {
-      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + '/interest/get');
+      console.log(time);
+      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `/interest/get?period=${time}`);
       if (!response.ok){
         throw new Error('Failed to fetch history');
       } // Adjust this URL to match your Flask server
-
+      console.log(response);
       const data = await response.json();
       setSeries(data.map((item: any) => ({
               date: item.Date,
@@ -136,7 +142,8 @@ const History = () => {
 
   // Fetch data on component mount or when dependencies change
   useEffect(() => {
-    getHistory();
+    getHistory(periodMap[selectedPeriod]);
+    console.log(periodMap[selectedPeriod])
   }, [selectedType, selectedPeriod]);
 
   return (

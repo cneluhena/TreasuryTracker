@@ -39,13 +39,13 @@ const login = async (req, res, next) => {
     const user = await User.findOne({ username });
     if (!user) {
       console.log("User Not Found");
-      return res.status(400).send("User Not Found");
+      return res.status(404).send("User Not Found");
     }
 
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
       console.log("Invalid Password");
-      return res.status(400).send("Invalid Password");
+      return res.status(404).send("Invalid Password");
     }
 
     const token = jwt.sign(
@@ -57,19 +57,17 @@ const login = async (req, res, next) => {
     res.status(200).send("Success");
   } catch {
     console.log("Error logging in",error);
-    res.status(400).send("Error logging in");
+    res.status(400).send("Error logging in with the username");
   }
 };
 
 const profile = async (req, res, next) => {
   try {
     const user = await User.findOne({ username: req.user.username });
-    console.log(user,"profile eka");
     if (!user) return res.status(404).json({ message: "User not found" });
 
     // Send profile data (excluding sensitive information like password)
-    console.log('Profile ot');
-    res.json({
+    res.status(200).json({
       username: user.username,
       firstName: user.firstName,
       lastName: user.lastName,
@@ -81,7 +79,7 @@ const profile = async (req, res, next) => {
   }
 };
 
-
+//update user profile
 const updateUserProfile = async (req, res, next) => {
   try {
     const { firstName, lastName, email, phoneNumber } = req.body;
@@ -103,9 +101,11 @@ const updateUserProfile = async (req, res, next) => {
   }
 };
 
+
+//logout
 const logout = async(req, res, next)=>{
     try{
-
+      
         res.clearCookie('token');
         res.status(200).send('logged out');
     
@@ -113,6 +113,11 @@ const logout = async(req, res, next)=>{
         console.error(error);
     }
 }
+
+//changing password
+const changePassword = async(req, res, next)=>{
+      
+}   
 
 const cookieCheck = async(req, res, next)=>{
     try{

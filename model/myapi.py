@@ -15,8 +15,8 @@ data_dict = {}
 scalers = {}
 
 def load_model_and_data(time_period):
-    model_path = f'model/Code/biLSTM_for_{time_period}.keras'
-    data_path = f'model/Data/{time_period} 2009-2019.csv'
+    model_path = f'model/monthly/{time_period}.h5'
+    data_path = f'model/Data/Sri Lanka {time_period} Bond Yield Historical Data.csv'
     
     if os.path.exists(model_path) and os.path.exists(data_path):
         model = load_model(model_path)
@@ -35,7 +35,7 @@ def load_model_and_data(time_period):
         return None, None, None, None
 
 # Load models and data for different time periods
-time_periods = ['3-Month', '6-Month', '1-Year', '2-Year', '3-Year', '5-Year', '10-Year', '30-Year']
+time_periods = ['3-Month', '6-Month', '1-Year', '2-Year','5-Year']
 for period in time_periods:
     models[period], data_dict[period], _, scalers[period] = load_model_and_data(period)
 

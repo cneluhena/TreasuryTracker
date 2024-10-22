@@ -52,7 +52,8 @@ const Forecast = () => {
     setLoading(true);
     try {
       const response = await fetch(process.env.NEXT_PUBLIC_MODEL_URL+'/predict', {
-        method: "GET"
+        method: "POST",
+        body: JSON.stringify({period: selectedPeriod})
       })
       if (!response.ok) {
         throw new Error('Failed to fetch predictions');

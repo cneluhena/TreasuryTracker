@@ -2,92 +2,93 @@ from flask import Flask, request, jsonify
 from tensorflow.keras.models import load_model
 import numpy as np
 import pandas as pd
-from sklearn.preprocessing import MinMaxScaler, StandardScaler
-from flask_cors import CORS  # Import CORS
-import json
+from sklearn.preprocessing import StandardScaler
+from flask_cors import CORS
+import os
 
 app = Flask(__name__)
-CORS(app)  # Apply CORS to the Flask app
+CORS(app)
 
-# Load your pre-trained model
-model = load_model('./Code/biLSTM_for_3months.keras')
+# Dictionary to store models and data for different time periods
+models = {}
+data_dict = {}
+scalers = {}
 
-# Initialize the MinMaxScaler with the same range as used during training
-# scaler = MinMaxScaler(feature_range=(0,1))
+def load_model_and_data(time_period):
+    model_path = f'model/monthly/{time_period}.h5'
+    data_path = f'model/Data/Sri Lanka {time_period} Bond Yield Historical Data.csv'
+    
+    if os.path.exists(model_path) and os.path.exists(data_path):
+        model = load_model(model_path)
+        data = pd.read_csv(data_path)
+        data = data.iloc[::-1].reset_index(drop=True)
+        data['Date'] = pd.to_datetime(data['Date'])
+        data.set_index('Date', inplace=True)
+        data = data[['Price']]
+        data = data.dropna()
+        
+        scaler = StandardScaler()
+        scaled_data = scaler.fit_transform(data)
+        
+        return model, data, scaled_data, scaler
+    else:
+        return None, None, None, None
 
-data = pd.read_csv('./Data/3-Month 2009-2019.csv')
-data=data.iloc[::-1].reset_index(drop=True)
-
-data['Date'] = pd.to_datetime(data['Date'])
-data.set_index('Date', inplace=True)
-data = data[['Price']]  # Select the X3M column
-data = data.dropna()
-
-# Normalize the data
-scaler = StandardScaler()
-scaled_data = scaler.fit_transform(data)
+# Load models and data for different time periods
+time_periods = ['3-Month', '6-Month', '1-Year', '2-Year','5-Year']
+for period in time_periods:
+    models[period], data_dict[period], _, scalers[period] = load_model_and_data(period)
 
 def predict_future(model, data, time_step, future_steps):
     predictions = []
     last_sequence = data[-time_step:]
     
     for _ in range(future_steps):
-        # Prepare the input data
         input_data = last_sequence.reshape((1, time_step, 1))
-        
-        # Predict the next value
         predicted_value = model.predict(input_data)
-        
-        # Store the predicted value
         predictions.append(predicted_value[0, 0])
-        
-        # Update the last_sequence
         last_sequence = np.append(last_sequence[1:], predicted_value, axis=0)
     
     return predictions
 
-@app.route('/', methods=['GET'])
+@app.route('/api', methods=['GET'])
 def get_predicts():
     return jsonify({'message': 'Welcome to the API'})
 
 @app.route('/history', methods=['GET'])
 def get_history():
+    time_period = request.args.get('period', '3-Month')
+    if time_period not in data_dict:
+        return jsonify({'error': 'Invalid time period'}), 400
+    
+    data = data_dict[time_period]
     result = [{'date': str(index.date()), 'interest': [row.Price]} for index, row in data.iterrows()]
+    return jsonify(result)
 
-# Output the result
-    # print(result)
-
-    # Convert to JSON string (Optional: Pretty print the JSON)
-    json_output = jsonify(result)
-
-    # print(json_output)
-    return json_output
-
-
-# Define a POST route to accept input and provide predictions
-@app.route('/predict', methods=['GET'])
+@app.route('/predict', methods=['POST'])
 def predict():
     try:
-
-        # Make predictions using the model
+        time_period = request.json.get('period', '3-Month')
+        if time_period not in models:
+            return jsonify({'error': 'Invalid time period'}), 400
+        
+        model = models[time_period]
+        data = data_dict[time_period]
+        scaler = scalers[time_period]
+        scaled_data = scaler.transform(data)
+        
         predictions = predict_future(model, scaled_data, 23, 7)
-
-        # Inverse transform the predictions to get them back to the original scale
         output = scaler.inverse_transform(np.array(predictions).reshape(-1, 1))
-
-        # Convert output to a list for JSON serialization
         output_list = output.tolist()
+        
         future_dates = pd.date_range(start=data.index[-1], periods=7 + 1, freq='W')[1:]
         future_dates = future_dates.strftime('%Y-%m-%d').tolist()
-        predictions_with_dates = [{'date': date, 'interest': rate} for date, rate in zip(future_dates, output_list)]
-        # Return the predictions as a JSON response
+        predictions_with_dates = [{'date': date, 'interest': rate[0]} for date, rate in zip(future_dates, output_list)]
+        
         return jsonify(predictions_with_dates)
 
     except Exception as e:
-        return jsonify({'error': str(e)})
-    
-
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True,host='0.0.0.0', port=5000)
-
+    app.run(debug=True)

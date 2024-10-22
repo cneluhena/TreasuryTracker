@@ -75,7 +75,6 @@ def predict():
         
         model = models[time_period]
         data = data_dict[time_period]
-        print(data)
         #scaler = scalers[time_period]
         scaler = StandardScaler()
         scaled_data = scaler.fit_transform(data.values.reshape(-1, 1))
@@ -85,7 +84,7 @@ def predict():
         output = scaler.inverse_transform(np.array(predictions).reshape(-1, 1))
         output_list = output.tolist()
         
-        future_dates = pd.date_range(start=data.index[-1], periods=7 + 1, freq='W')[1:]
+        future_dates = pd.date_range(start=data.index[-1], periods=7 + 1, freq='M')[1:]
         future_dates = future_dates.strftime('%Y-%m-%d').tolist()
         predictions_with_dates = [{'date': date, 'interest': rate[0]} for date, rate in zip(future_dates, output_list)]
         

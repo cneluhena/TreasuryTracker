@@ -15,8 +15,8 @@ data_dict = {}
 scalers = {}
 
 def load_model_and_data(time_period):
-    model_path = f'model/monthly/{time_period}.h5'
-    data_path = f'model/Data/Sri Lanka {time_period} Bond Yield Historical Data.csv'
+    model_path = f'monthly/{time_period}.h5'
+    data_path = f'Data/Sri Lanka {time_period} Bond Yield Historical Data.csv'
     
     if os.path.exists(model_path) and os.path.exists(data_path):
         model = load_model(model_path)
@@ -28,7 +28,7 @@ def load_model_and_data(time_period):
         data = data.dropna()
         
         scaler = StandardScaler()
-        scaled_data = scaler.fit_transform(data)
+        scaled_data = scaler.fit_transform(data.values.reshape(-1, 1))
         
         return model, data, scaled_data, scaler
     else:
@@ -61,7 +61,7 @@ def get_history():
     if time_period not in data_dict:
         return jsonify({'error': 'Invalid time period'}), 400
     
-    data = data_dict[time_period]
+    data = data_dict[time_period].values.reshape(-1, 1)
     result = [{'date': str(index.date()), 'interest': [row.Price]} for index, row in data.iterrows()]
     return jsonify(result)
 
@@ -74,8 +74,11 @@ def predict():
         
         model = models[time_period]
         data = data_dict[time_period]
-        scaler = scalers[time_period]
-        scaled_data = scaler.transform(data)
+        print(data)
+        #scaler = scalers[time_period]
+        scaler = StandardScaler()
+        scaled_data = scaler.fit_transform(data.values.reshape(-1, 1))
+        #scaled_data = scaler.transform(data)
         
         predictions = predict_future(model, scaled_data, 23, 7)
         output = scaler.inverse_transform(np.array(predictions).reshape(-1, 1))

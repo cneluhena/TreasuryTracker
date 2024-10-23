@@ -58,7 +58,7 @@ def main():
     
     if st.button("Get Answer"):
         if question:
-            with st.spinner("Thinking..."):
+            with st.spinner(":blue[Thinking...]"):
                 answer = get_answer(question)
             # st.markdown(f'<div class="stAlert" style="color:black;">Here\'s what I found:</div>', unsafe_allow_html=True)
             st.markdown(f'<div class="stMarkdown" style="color:black;">{answer}</div>', unsafe_allow_html=True)
@@ -68,7 +68,7 @@ def main():
     st.markdown("---")
 
     # File upload for investment advice
-    st.subheader("Get Investment Advice")
+    st.subheader(":blue[Get Investment Advice]")
     uploaded_file = st.file_uploader("Upload your CSV file with predicted rates", type="csv")
     
     if uploaded_file is not None:

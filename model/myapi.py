@@ -15,8 +15,8 @@ data_dict = {}
 scalers = {}
 
 def load_model_and_data(time_period):
-    model_path = f'monthly/{time_period}.h5'
-    data_path = f'Data/Sri Lanka {time_period} Bond Yield Historical Data.csv'
+    model_path = f'model/monthly/{time_period}.h5'
+    data_path = f'model/Data/Sri Lanka {time_period} Bond Yield Historical Data.csv'
     
     if os.path.exists(model_path) and os.path.exists(data_path):
         model = load_model(model_path)
@@ -80,7 +80,7 @@ def predict():
         scaled_data = scaler.fit_transform(data.values.reshape(-1, 1))
         #scaled_data = scaler.transform(data)
         
-        predictions = predict_future(model, scaled_data, 23, 7)
+        predictions = predict_future(model, scaled_data, 15, 7)
         output = scaler.inverse_transform(np.array(predictions).reshape(-1, 1))
         output_list = output.tolist()
         

@@ -93,5 +93,41 @@ def predict():
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 
+@app.route('/predict_multiple', methods=['POST'])
+def predict_multiple():
+    try:
+        future_date = pd.to_datetime(request.json.get('date'))
+        results = {}
+        for period in time_periods:
+            model = models[period]
+            data = data_dict[period]
+            scaler = StandardScaler()
+            scaled_data = scaler.fit_transform(data.values.reshape(-1, 1))
+        
+            days_to_predict = (future_date - data.index[-1]).days
+            months_to_predict = days_to_predict // 30 + 1
+        
+            predictions = predict_future(model, scaled_data, 15, months_to_predict)
+            output = scaler.inverse_transform(np.array(predictions).reshape(-1, 1))
+        
+            results[period] = float(output[-1][0])
+        
+        # Modify the period names in the response
+        modified_results = {}
+        for key, value in results.items():
+            if key == '1-Year':
+                modified_results['12-Month'] = value
+            elif key == '2-Year':
+                modified_results['24-Month'] = value
+            elif key == '5-Year':
+                modified_results['60-Month'] = value
+            else:
+                modified_results[key] = value
+        
+        return jsonify(modified_results)
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 if __name__ == '__main__':
-    app.run(debug=True,port=5000)
+    app.run(debug=True,port=8080)

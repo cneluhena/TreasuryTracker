@@ -170,8 +170,9 @@ const deleteInvestment = async(req, res, next)=>{
     return res.status(404).send("Error deleting Investment");
   }
     
-
 }
+
+
 
 // const getFuturePredictions = async (req, res, next) => {
 //   try {

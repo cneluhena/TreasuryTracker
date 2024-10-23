@@ -11,8 +11,8 @@ const DChart = () => {
     setIsClient(true);
   }, []);
   const options = {
-    series: [44, 55, 13, 33],
-    labels: ['3 Month', '6 Month', '12 month', '10 years'],
+    series: [44, 55, 13, 33, 20],
+    labels: ['3 Month', '6 Month', '12 month', '2 years', '5 years'],
     title: {
       text: 'Investments by period', // Chart title // Title alignment
       margin: 10, // Margin around the title

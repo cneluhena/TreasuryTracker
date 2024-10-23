@@ -88,11 +88,13 @@ const Forecast = () => {
             menuName="Investment Type"
             menuItems={treasuryType}
             onSelectChange={handleChange}
+            disabled={false}
           />
           <DropDown
             menuName="Period"
             menuItems={period}
             onSelectChange={handlePeriodChange}
+            disabled={false}
           />
         </Grid>
       </Grid>

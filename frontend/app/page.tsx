@@ -35,7 +35,7 @@ const Home=()=>{
     sx={{
       minHeight: '100vh',
       p:4,
-      bgcolor: "#FDFAF0",
+      bgcolor: "#F5F5F7",
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',

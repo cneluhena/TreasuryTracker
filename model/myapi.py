@@ -80,7 +80,7 @@ def predict():
         scaled_data = scaler.fit_transform(data.values.reshape(-1, 1))
         #scaled_data = scaler.transform(data)
         
-        predictions = predict_future(model, scaled_data, 23, 7)
+        predictions = predict_future(model, scaled_data, 15, 7)
         output = scaler.inverse_transform(np.array(predictions).reshape(-1, 1))
         output_list = output.tolist()
         

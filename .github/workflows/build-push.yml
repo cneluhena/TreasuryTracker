@@ -81,6 +81,10 @@ jobs:
             sudo docker rm treasury-tracker-backend || true
             sudo docker stop treasury-tracker-model || true
             sudo docker rm treasury-tracker-model || true
+
+            sudo docker stop $(sudo docker ps -a -q)
+            sudo docker rm $(sudo docker ps -a -q)
+            sudo docker rmi $(sudo docker images -a -q)
             
             # Run Backend container on port 5000
             sudo docker run -d --name treasury-tracker-backend \

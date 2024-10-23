@@ -127,6 +127,8 @@ const Forecast = () => {
               <TimeSeriesChart
                 series={series}
                 title={`Predicted Interest Rates for ${selectedPeriod} ${selectedType}`}
+                type='datetime'
+                xTitle="Time"
               />
             </Grid>
           </Grid>

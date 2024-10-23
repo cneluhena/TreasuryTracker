@@ -100,11 +100,13 @@ const Forecast = () => {
             menuName="Investment Type"
             menuItems={treasuryType}
             onSelectChange={handleChange}
+            disabled={false}
           />
           <DropDown
             menuName="Period"
             menuItems={period}
             onSelectChange={handlePeriodChange}
+            disabled={false}
           />
         </Grid>
       </Grid>
@@ -128,7 +130,7 @@ const Forecast = () => {
           </Grid>
           <Grid item xs={12} md={6}>
 
-            <TimeSeriesChart series={series} title="Predicted Interest Rates"/>
+            <TimeSeriesChart series={series} type='datetime' title="Predicted Interest Rates" xTitle="Time"/>
 
           </Grid>
         </Grid>

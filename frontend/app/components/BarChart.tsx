@@ -60,7 +60,7 @@ const BChart = () => {
               xs: '300px', // height for small screens (mobile)
               sm: '400px', // height for tablets
               md: '400px', // height for medium screens (desktop)
-              lg: '500px', // height for large screens
+              lg: '350px', // height for large screens
             },}}>
           <Chart
             options={options}

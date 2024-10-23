@@ -7,6 +7,8 @@ const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 interface Props {
   series: ForecastObject[];
   title: string;
+  type: 'category'|'datetime'
+  xTitle: string
 
 }
 
@@ -15,7 +17,7 @@ interface ForecastObject {
   interest: number;
 }
 
-const TimeSeriesChart = ({ series, title }: Props) => {
+const TimeSeriesChart = ({ series, title, type, xTitle }: Props) => {
   const [categories, setCategories] = useState<string[]>([]);
   const [dataPoints, setDataPoints] = useState<number[]>([]);
   useEffect(() => {
@@ -56,8 +58,11 @@ const TimeSeriesChart = ({ series, title }: Props) => {
       },
     },
     xaxis: {
-      type: 'datetime',
-      categories: categories
+      type: type,
+      categories: categories,
+      title: {
+        text: xTitle
+      },
     },
     yaxis: {
       title: {
@@ -69,8 +74,8 @@ const TimeSeriesChart = ({ series, title }: Props) => {
       type: 'gradient',
       gradient: {
         shadeIntensity: 1,
-        opacityFrom: 0.7,
-        opacityTo: 0.9,
+        opacityFrom: 0.5,
+        opacityTo: 0.4,
         stops: [0, 100]
       }
     },

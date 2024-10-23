@@ -29,8 +29,21 @@ st.markdown("""
     h1 {
             color: #0077b6; /* Title color */
         }
+    label {
+        color: black !important;
+        font-weight: bold;
+    }
+    .subheader {
+        color: #023e8a; /* Subheader color */
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 1rem;
+    }
     .stTextInput>div>div>input {
         border-radius: 5px;
+    }
+    .stAlert, .stMarkdown {
+        color: black !important; /* Change font color to black */
     }
 </style>
 """, unsafe_allow_html=True)
@@ -38,7 +51,7 @@ st.markdown("""
 # Main app
 def main():
     st.title("🏦 FinGuide Q&A")
-    st.subheader("Your AI-powered Financial Assistant")
+    st.markdown('<h2 class="subheader">Your AI-powered Financial Assistant</h2>', unsafe_allow_html=True)
 
     # Question input
     question = st.text_input("Ask a question about treasury bills, bonds, or financial markets:")
@@ -47,8 +60,8 @@ def main():
         if question:
             with st.spinner("Thinking..."):
                 answer = get_answer(question)
-            st.success("Here's what I found:")
-            st.write(answer)
+            # st.markdown(f'<div class="stAlert" style="color:black;">Here\'s what I found:</div>', unsafe_allow_html=True)
+            st.markdown(f'<div class="stMarkdown" style="color:black;">{answer}</div>', unsafe_allow_html=True)
         else:
             st.warning("Please enter a question.")
 

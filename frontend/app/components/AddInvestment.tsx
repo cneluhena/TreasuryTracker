@@ -16,6 +16,7 @@ import { Dayjs } from 'dayjs';
 
 
 
+
 interface FormData {
   investmentName: string;
   investmentType: string;
@@ -37,7 +38,7 @@ interface AddInvestmentDialogProps {
 
 const AddInvestmentDialog = ({ open, onClose, refreshPage, errorHandle }: AddInvestmentDialogProps) => {
   
-  const { handleSubmit, control, setValue, reset } = useForm<FormData>({
+  const { handleSubmit, control, setValue, reset, watch } = useForm<FormData>({
     defaultValues: {
       investmentName: '', // Initialize with an empty string
       investmentType: '',
@@ -49,6 +50,11 @@ const AddInvestmentDialog = ({ open, onClose, refreshPage, errorHandle }: AddInv
   maturityDate: null
     },
   });
+  const investmentType = watch('investmentType');
+
+
+  const billPeriods = [3, 6, 12]
+  const bondPeriods = [24, 60]
 
 
   const onSubmit = async (data: FormData) => {
@@ -133,18 +139,31 @@ const AddInvestmentDialog = ({ open, onClose, refreshPage, errorHandle }: AddInv
                 />
               )}
             />
-            <Controller
-              name="maturityPeriod"
-              control={control}
-              render={({ field }) => (
-                <TextField
-                  {...field}
-                  size="small"
-                  label="Maturity Period in Months"
-                  type="number"
-                />
-              )}
-            />
+            <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+              <InputLabel id="investment-period-label">Maturity Period</InputLabel>
+              <Controller
+                name="maturityPeriod"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    labelId="investment-period-label"
+                    label="Maturity Period"
+                  >
+                    {investmentType === "Treasury Bills" && billPeriods.map((period) => (
+                      <MenuItem key={period} value={period}>
+                        {period} months
+                      </MenuItem>
+                    ))}
+                    {investmentType === "Treasury Bonds" && bondPeriods.map((period) => (
+                      <MenuItem key={period} value={period}>
+                        {period} months
+                      </MenuItem>
+                    ))}
+                  </Select>
+                )}
+              />
+            </FormControl>
             <Controller
               name="expectedReturn"
               control={control}

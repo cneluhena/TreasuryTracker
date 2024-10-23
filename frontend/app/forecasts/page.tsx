@@ -17,6 +17,8 @@ import TimeSeriesChart from "../components/TimeSeriesChart";
 import { useState ,useEffect} from "react";
 import DropDown from "../components/DropDown";
 import ForecastTable from "../components/ForecastTable";
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 
 
@@ -35,6 +37,11 @@ const Forecast = () => {
   const treasuryType = ["Treasury Bills", "Treasury Bonds"];
   const [selectedType, setSelectedType] = useState("");
   const [loading, setLoading] = useState(false);
+  const [alignment, setAlignment] = useState('web');
+  const [dates, setDates] = useState([]);
+  const [selectedDate, setSelectedDate] = useState('');
+  const [resetKey, setResetKey] = useState(0);
+  const [isDisabled, setIsDisabled] = useState(false);
   const billTimePeriods = ["3 months", "6 months", "12 months"];
   const bondTimePeriods = [
     "2 years",
@@ -86,6 +93,44 @@ const Forecast = () => {
     }
   };
 
+  const handleDateChange = async(date: string)=>{
+    try{
+      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `/interest/yield?date=${date}`);
+      const data = await response.json();
+      setSeries(data.map(item=>({
+        date:item.Period.toString(),
+        interest: item.Price
+      })))
+      setSelectedDate(date);
+      
+    } catch(err){
+      console.log(err)
+    }
+  }
+ 
+
+  const handleToggleChange = (
+    
+    event: React.MouseEvent<HTMLElement>,
+    newAlignment: string,
+  ) => {
+    
+    setAlignment(newAlignment);
+    setResetKey(prev=>prev+1);
+    setSelectedDate('');
+    setSelectedType('');
+    setSelectedPeriod('');
+    if (newAlignment == 'history'){
+      setIsDisabled(true);
+      console.log('reached');
+    
+
+    } else{
+      setIsDisabled(false);
+    }
+  
+  };
+
   const handlePeriodChange = (selectedValue: string) => {
     setSelectedPeriod(selectedValue);
   };
@@ -95,18 +140,59 @@ const Forecast = () => {
   return (
     <>
       <Grid container spacing={4}>
+      <Grid item xs={12} container justifyContent="left" >
+        <ToggleButtonGroup
+      color="primary"
+      value={alignment}
+      exclusive
+      onChange={handleToggleChange}
+      aria-label="Platform"
+    >
+      <ToggleButton value="yield" sx={{
+        marginRight: '4px',
+          '&.Mui-selected': {
+            backgroundColor: 'primary.main',
+            color: 'white',
+            '&:hover': {
+              backgroundColor: 'primary.dark',
+            }}}}>Yield Curve</ToggleButton>
+      <ToggleButton sx={{
+        backgroundColor: 'white',
+          '&.Mui-selected': {
+            backgroundColor: 'primary.main',
+            color: 'white',
+            boxShadow: 4,
+            '&:hover': {
+              backgroundColor: 'primary.dark',
+            }}}} value="history">Interests</ToggleButton>
+      
+    </ToggleButtonGroup>
+        </Grid>
+         
         <Grid item xs={12} container justifyContent="center">
           <DropDown
             menuName="Investment Type"
             menuItems={treasuryType}
             onSelectChange={handleChange}
             disabled={false}
+            resetKey={resetKey}
+
           />
           <DropDown
             menuName="Period"
             menuItems={period}
             onSelectChange={handlePeriodChange}
             disabled={false}
+            resetKey={resetKey}
+
+          />
+          <DropDown
+            menuName="Date"
+            menuItems={dates}
+            onSelectChange={handleDateChange}
+            disabled={isDisabled}
+            resetKey={resetKey}
+          
           />
         </Grid>
       </Grid>

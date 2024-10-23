@@ -203,7 +203,7 @@ const SignupForm = () => {
             <Button variant="contained" fullWidth onClick={handleSignIn}>
           Login
         </Button>
-      <Link href="/reset-password"><Typography component="span" sx={{fontWeight: 'bold', fontSize: 13, display: "block", textAlign: "right", paddingTop: 1}}>Forget Password</Typography></Link>
+     <Typography component="span" sx={{fontWeight: 'bold', fontSize: 13, display: "block", textAlign: "right", paddingTop: 1}}> <Link href="/reset-password">Forget Password</Link></Typography>
            
 
       <Typography sx={{fontSize: 15, paddingTop: 2}}>Don&apos;t have an account? <Link href="/signup"><Typography component="span" sx={{fontWeight: 'bold', fontSize: 15}}>Sign Up</Typography></Link></Typography>

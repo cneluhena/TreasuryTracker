@@ -21,7 +21,7 @@ const authenticate = async (req, res, next) => {
   } catch(error) {
     res.clearCookie("token");
     const err = new Error("Aunthenticatoin Failed!");
-    err.statusCode(401);
+    err.status = 401
     next(err);
   }
 };

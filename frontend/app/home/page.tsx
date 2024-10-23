@@ -22,6 +22,7 @@ const HomePage = () => {
   const [open, setOpen] = useState(false);
   const [total, setTotal] = useState(0);
   const [activeTotal, setActiveTotal] = useState(0);
+  const [thismonth, setThismonth] = useState(0);
 
 
   useEffect(()=>{
@@ -103,14 +104,38 @@ const HomePage = () => {
       console.error("Error fetching investment details:", error);
     } 
   }
+  
+  const getThisMonthInvestments = async ()=>{
+    try {
+      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/investment/thismonth", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
 
+      if (response.ok) {
+        const data = await response.json();
+        setThismonth(data);
+      } else {
+        //router.push("/login");
+        setThismonth(0);
+        console.log(0);
+        throw new Error("Failed to active investments");
+      }
+    } catch (error) {
+      setThismonth(0)
+      console.error("Error fetching investment details:", error);
+    } 
+  }
   const fetchDashboardDetails = async()=>{
     try{
       setLoading(true);
       await getTotalInvestments();
       await fetchUserDetails();
       await getActiveInvestments()
-     
+      await getThisMonthInvestments();
     } catch(error){
       throw new Error("Failed to fetch user details");
     } finally{
@@ -138,7 +163,7 @@ const HomePage = () => {
             <Grid item xs={12} sm={6} md={4}>
               <StatCard
                 title={"This month investments"}
-                value={"50,000"}
+                value={thismonth.toLocaleString('en-US', { style: 'currency', currency: 'LKR' })}
                 trend={"success"}
                 comparison={"last month"}
               />

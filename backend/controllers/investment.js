@@ -124,9 +124,12 @@ const getTotalActiveInvestments = async (req, res, next)=>{
 
 const getThisMonthInvestments = async (req, res, next)=>{
   const now = new Date();
-  const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 1); // First day of the current month
+  const user = req.user;
+  const userId = user._id.toString(); 
+  const firstDayOfMonth = new Date(now.getFullYear(), now.getMonth(), 2); // First day of the current month
   const lastDayOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 0); // Last day of the current month
-
+  console.log(firstDayOfMonth);
+  console.log(lastDayOfMonth);
   const investmentsThisMonth = await Investment.aggregate([
     {
       $match: {

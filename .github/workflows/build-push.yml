@@ -31,6 +31,7 @@ jobs:
           docker push '${{secrets.DOCKER_LOGIN}}'/treasury-tracker-backend:latest
 
   build_model:
+    needs: build_backend
     runs-on: ubuntu-latest
     steps:
       # Checkout repository code
@@ -57,7 +58,7 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
-    needs: build
+    needs: build_model
     steps:
       # Deploy to EC2
       - name: Deploy on EC2

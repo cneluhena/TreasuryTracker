@@ -111,8 +111,20 @@ def predict_multiple():
             output = scaler.inverse_transform(np.array(predictions).reshape(-1, 1))
         
             results[period] = float(output[-1][0])
-    
-        return jsonify(results)
+        
+        # Modify the period names in the response
+        modified_results = {}
+        for key, value in results.items():
+            if key == '1-Year':
+                modified_results['12-Month'] = value
+            elif key == '2-Year':
+                modified_results['24-Month'] = value
+            elif key == '5-Year':
+                modified_results['60-Month'] = value
+            else:
+                modified_results[key] = value
+        
+        return jsonify(modified_results)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 jobs:
-  build-backend:
+  build_backend:
     runs-on: ubuntu-latest
     steps:
       # Checkout repository code
@@ -30,7 +30,7 @@ jobs:
         run: |
           docker push '${{secrets.DOCKER_LOGIN}}'/treasury-tracker-backend:latest
 
-  build-model:
+  build_model:
     runs-on: ubuntu-latest
     steps:
       # Checkout repository code

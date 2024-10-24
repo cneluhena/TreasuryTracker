@@ -13,7 +13,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import TextField from "@mui/material/TextField";
 import { useForm, Controller} from "react-hook-form";
 import dayjs, { Dayjs } from 'dayjs';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 
 
@@ -29,52 +29,58 @@ interface FormData {
   maturityDate: Dayjs | null;
 }
 
+interface UserInvestment {
+    investmentName: string;
+    investmentType: string;
+    investmentAmount: string| number;
+    maturityPeriod: string| number;
+    expectedReturn: string | number;
+    interestRate: string | number;
+    investmentDate: string;
+    maturityDate: string;
+  }
 
-interface AddInvestmentDialogProps {
+
+interface UpInvestmentDialogProps {
   open: boolean;
   onClose: () => void;
-  refreshPage: ()=> void;
-  errorHandle: (value:boolean)=> void,
-  handleMessage: (message:string)=>void
-  
-  editInvestment?: any
+  refreshPage?: ()=> void;
+  errorHandle?: (value:boolean)=> void,
+  editInvestment: UserInvestment 
+  updateMessage: (message:string)=>void
+  investmentId: string
 }
 
-const AddInvestmentDialog = ({ open, onClose, refreshPage, errorHandle, editInvestment, handleMessage }: AddInvestmentDialogProps) => {
-  
+const UpdateInvestmentDialog = ({ open, onClose, refreshPage, errorHandle, editInvestment, investmentId, updateMessage }: UpInvestmentDialogProps) => {
+    const [message, setMessage] = useState('');
   const { handleSubmit, control, setValue, reset, watch } = useForm<FormData>({
     defaultValues: {
-      investmentName: '', // Initialize with an empty string
-      investmentType: '',
-      investmentAmount: '',
-      maturityPeriod: '',
-      expectedReturn: '',
-      interestRate: '',
-      investmentDate: null,
-  maturityDate: null
+      investmentName: editInvestment.investmentName, // Initialize with an empty string
+      investmentType: editInvestment.investmentType,
+      investmentAmount: editInvestment.investmentAmount,
+      maturityPeriod: editInvestment.maturityPeriod,
+      expectedReturn: editInvestment.expectedReturn,
+      interestRate: editInvestment.interestRate,
+      investmentDate: dayjs(editInvestment.investmentDate),
+  maturityDate: dayjs(editInvestment.maturityDate)
     },
   });
   const investmentType = watch('investmentType');
-
-
 
 
   const billPeriods = [3, 6, 12]
   const bondPeriods = [24, 60]
   
 
-
- 
   const onSubmit = async (data: FormData) => {
-    
     const formattedData = {
       ...data,
       investmentDate: data.investmentDate ? data.investmentDate.toISOString() : null,
       maturityDate: data.maturityDate ? data.maturityDate.toISOString() : null,
     };
     try{
-      const response = await  fetch(process.env.NEXT_PUBLIC_API_URL + '/investment/add ', {
-        method: 'POST',
+      const response = await  fetch(process.env.NEXT_PUBLIC_API_URL + `/investment/update?id=${investmentId}`, {
+        method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -85,9 +91,9 @@ const AddInvestmentDialog = ({ open, onClose, refreshPage, errorHandle, editInve
       if (!response.ok){
         throw new Error("Internal Error")
       } else{
-        console.log("Investment Succefully Added");
+        console.log("Investment Succefully Updated");
         errorHandle(false);
-        handleMessage("Investment Succefully Added");
+        updateMessage("Investment Successfully Updated");
         reset();
         onClose();
         refreshPage();
@@ -100,6 +106,7 @@ const AddInvestmentDialog = ({ open, onClose, refreshPage, errorHandle, editInve
     }
    
   };
+
 
   return (
     <Dialog open={open} onClose={onClose}>
@@ -224,7 +231,7 @@ const AddInvestmentDialog = ({ open, onClose, refreshPage, errorHandle, editInve
               />
             </LocalizationProvider>
             <Button type="submit" variant="contained">
-              Add Investment
+              Update Investment
             </Button>
           </Stack>
         </form>
@@ -234,4 +241,4 @@ const AddInvestmentDialog = ({ open, onClose, refreshPage, errorHandle, editInve
   );
 };
 
-export default AddInvestmentDialog;
+export default UpdateInvestmentDialog;

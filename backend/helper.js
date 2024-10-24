@@ -8,13 +8,13 @@ const sendEmail = (email, link)=>{
         port: 465,
         secure: true,
         auth: {
-          user: "codeblooded00@gmail.com",
-          pass: "bepl hgta ilsy cmkd"
+          user: process.env.EMAIL,
+          pass: process.env.APP_PASSWORD
         }
       });
     
       var mailOptions = {
-        from: process.env.USERNAME,
+        from: "TREASURY TRACKER",
         to: email,
         subject: 'Password Reset Link',
         html:`

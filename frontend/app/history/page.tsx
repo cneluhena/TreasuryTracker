@@ -93,10 +93,10 @@ const History = () => {
     try{
       const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `/interest/yield?date=${date}`);
       const data = await response.json();
-      setSeries(data.map(item=>({
-        date:item.Period.toString(),
+      setSeries([{ date: 0, interest: 0 }, ...data.map(item => ({
+        date: item.Period.toString(),
         interest: item.Price
-      })))
+      }))])
       setSelectedDate(date);
       
     } catch(err){

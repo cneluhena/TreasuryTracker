@@ -133,11 +133,11 @@ const Forecast = () => {
       });
 
       const data = await response.json();
-      const result = Object.entries(data).map(([date, price]) => ({
+      const result = [{ date: '0', interest: 0 }, ...Object.entries(data).map(([date, price]) => ({
         date: date,
-        interest: Number(parseFloat(price as string).toFixed(3)) // Format price to 2 decimal places
-    }));
-      setSeries(result);
+        interest: Number(parseFloat(price as string).toFixed(3)) // Format price to 3 decimal places
+    }))];
+    setSeries(result);
     
  
       

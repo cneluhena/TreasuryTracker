@@ -65,6 +65,25 @@ const getInvestments = async (req, res, next) => {
   }
 };
 
+const getInvestment = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const id = req.query.id;
+    console.log("reached");
+    if (!user) {
+      return res.status(404).send("No user Found");
+    }
+
+    const userId = user._id.toString(); //converting the userId to string
+
+    //query to get the investments of a user from the db
+    const investment = await Investment.find({ userId, _id:id});
+    return res.status(200).json(investment);
+  } catch (error) {
+    return res.status(200).send("Internal Error");
+  }
+};
+
 const getTotalInvestments = async (req, res, next)=>{
 
   try {
@@ -91,7 +110,6 @@ const getTotalInvestments = async (req, res, next)=>{
   } catch (error) {
     return res.status(200).send("Internal Error");
   }
-
 }
 
 const getTotalActiveInvestments = async (req, res, next)=>{
@@ -172,6 +190,24 @@ const deleteInvestment = async(req, res, next)=>{
     
 }
 
+const updateInvestment  = async(req, res, next)=>{
+  try{
+    const user = req.user;
+    if (!user){
+      return res.status(404).send("Not authorized");
+    }
+    const updatedData = req.body;
+    const investmentId = await req.query.id;
+    const updateInvestment = await Investment.updateOne({_id:investmentId, userId:user._id.toString()}, updatedData);
+    if (updateInvestment){
+       return res.status(200).send("Investment Updated");
+
+    }  return res.status(400).send("Error"); 
+  } catch(error){
+    return res.status(404).send("Error deleting Investment");
+  }
+}
+
 
 
 // const getFuturePredictions = async (req, res, next) => {
@@ -184,4 +220,4 @@ const deleteInvestment = async(req, res, next)=>{
 // };
 
 
-module.exports = { addInvestment, getInvestments, getTotalInvestments, getTotalActiveInvestments,getThisMonthInvestments, deleteInvestment };
+module.exports = { addInvestment, getInvestments, getTotalInvestments, getTotalActiveInvestments,getThisMonthInvestments, deleteInvestment, updateInvestment, getInvestment };

@@ -9,7 +9,8 @@ const {
   getFuturePredictions,
   getTotalInvestments, 
   getTotalActiveInvestments, 
-  deleteInvestment, getThisMonthInvestments
+  deleteInvestment, getThisMonthInvestments,
+  updateInvestment, getInvestment
 } = require("../controllers/investment");
 
 router.post("/add", authenticate, addInvestment);
@@ -18,5 +19,7 @@ router.get("/total", authenticate, getTotalInvestments)
 router.get("/active", authenticate, getTotalActiveInvestments);
 router.delete("/delete", authenticate, deleteInvestment);
 router.get("/thismonth", authenticate, getThisMonthInvestments);
+router.put("/update", authenticate, updateInvestment);
+router.get("/getInvestment", authenticate, getInvestment)
 // router.get("/predict", getFuturePredictions);
 module.exports = router;

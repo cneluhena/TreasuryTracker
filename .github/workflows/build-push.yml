@@ -93,6 +93,8 @@ jobs:
             -e DB_URL=${{ secrets.DB_URL }} \
             -e DB_INTEREST_URL=${{ secrets.DB_INTEREST_URL }} \
             -e MODEL_URL=${{ secrets.MODEL_URL }} \
+            -e APP_PASSWORD=${{ secrets.APP_PASSWORD }} \
+            -e EMAIL=${{ secrets.EMAIL }} \
             -p 5000:5000 \
             ${{ secrets.DOCKER_LOGIN }}/treasury-tracker-backend:latest
 

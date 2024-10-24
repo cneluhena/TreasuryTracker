@@ -1,0 +1,20 @@
+services:
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"  # Map frontend port
+    depends_on:
+      - backend  # Wait for backend to start
+    
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"  # Map backend port
+    environment:
+      - SECRET_KEY=${SECRET_key}
+      - PORT=${PORT}
+      - DB_URL=${DB_URL} # Set any necessary environment variables

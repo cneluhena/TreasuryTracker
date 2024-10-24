@@ -19,6 +19,7 @@ const Forecast = () => {
   const treasuryType = ["Treasury Bills", "Treasury Bonds"];
   const [selectedType, setSelectedType] = useState("");
   const [loading, setLoading] = useState(false);
+ 
 
   const [alignment, setAlignment] = useState('web');
   const [dates, setDates] = useState([]);
@@ -32,6 +33,11 @@ const Forecast = () => {
 
 
   const [series, setSeries] = useState<ForecastObject[]>([]);
+  useEffect(() => {
+    if (selectedPeriod) {
+      fetchPredictions();
+    }
+  }, [selectedPeriod]);
 
   const fetchPredictions = async () => {
     if (!selectedPeriod) return;
@@ -40,7 +46,7 @@ const Forecast = () => {
     setError(null);
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/interest/predict`,
+        `${process.env.NEXT_PUBLIC_MODEL_URL}/predict`,
         {
           method: "POST",
           headers: {
@@ -75,6 +81,13 @@ const Forecast = () => {
     }
   }, [selectedPeriod]);
 
+  useEffect(()=>{
+    futureDates();
+  }, [])
+
+  useEffect(()=>{
+    fetchYieldPredictions();
+  }, [selectedDate])
   const handleChange = (selectedValue: string) => {
     if (selectedValue === "Treasury Bills") {
       setPeriod(billTimePeriods);
@@ -86,22 +99,55 @@ const Forecast = () => {
     setSelectedPeriod("");
   };
 
-  const handleDateChange = async(date: string)=>{
+  const futureDates = ()=>{
+    const today = new Date();
+
+
+    const datesList = [];
+
+
+  for (let i = 0; i <= 7; i++) {
+    const futureDate = new Date(today.getFullYear(), today.getMonth() + i, 1);
+
+    const month = futureDate.getMonth()+1;
+    const year = futureDate.getFullYear();
+
+    datesList.push(`${month}/${year}`);
+  }
+
+  setDates(datesList);
+
+
+
+}
+
+  const fetchYieldPredictions = async()=>{
+    setLoading(true);
     try{
-      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `/interest/yield?date=${date}`);
+      const response = await fetch(process.env.NEXT_PUBLIC_MODEL_URL + `/predict_multiple`, {
+        method: 'POST', // Specifies the HTTP method
+        headers: {
+          'Content-Type': 'application/json', 
+        },
+        body: JSON.stringify({"date": selectedDate}), 
+      });
+
       const data = await response.json();
-      setSeries(data.map(item=>({
-        date:item.Period.toString(),
-        interest: item.Price
-      })))
-      setSelectedDate(date);
+      const result = Object.entries(data).map(([date, price]) => ({
+        date: date,
+        interest: Number(parseFloat(price as string).toFixed(3)) // Format price to 2 decimal places
+    }));
+      setSeries(result);
+    
+ 
       
     } catch(err){
       console.log(err)
+    } finally{
+      setLoading(false);
     }
   }
  
-
   const handleToggleChange = (
     
     event: React.MouseEvent<HTMLElement>,
@@ -127,6 +173,10 @@ const Forecast = () => {
   const handlePeriodChange = (selectedValue: string) => {
     setSelectedPeriod(selectedValue);
   };
+
+  const handleDateChange = (selectedDate: string) =>{
+    setSelectedDate(selectedDate);
+  }
 
   return (
     <Box sx={{ p: 4 }}>
@@ -222,6 +272,33 @@ const Forecast = () => {
             </Grid>
           </Grid>
         ))}
+        {
+        alignment === 'yield' && selectedDate && (
+          loading ? (
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "75vh",
+              }}
+            >
+              <CircularProgress />
+            </Box>
+          ) :
+          <Grid container spacing={4} justifyContent="center" marginTop={1}>
+          <Grid item xs={12} md={6}>
+            <TimeSeriesChart
+              series={series}
+              title="Yield Curve"
+              type='category'
+              xTitle="Maturity Period in months"
+              
+            />
+          </Grid>
+        </Grid>
+        )
+      }
     </Box>
   );
 };

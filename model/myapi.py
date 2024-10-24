@@ -15,6 +15,7 @@ data_dict = {}
 scalers = {}
 
 def load_model_and_data(time_period):
+
     model_path = f'monthly/{time_period}.keras'
     data_path = f'Data/Sri Lanka {time_period} Bond Yield Historical Data.csv'
     
@@ -123,11 +124,15 @@ def predict_multiple():
         modified_results = {}
         for key, value in results.items():
             if key == '1-Year':
-                modified_results['12-Month'] = value
+                modified_results['12'] = value
             elif key == '2-Year':
-                modified_results['24-Month'] = value
+                modified_results['24'] = value
             elif key == '5-Year':
-                modified_results['60-Month'] = value
+                modified_results['60'] = value
+            elif key == '3-Month':
+                modified_results['3'] = value
+            elif key == '6-Month':
+                modified_results['6'] = value
             else:
                 modified_results[key] = value
         

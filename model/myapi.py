@@ -15,8 +15,9 @@ data_dict = {}
 scalers = {}
 
 def load_model_and_data(time_period):
-    model_path = f'model/monthly/{time_period}.h5'
-    data_path = f'model/Data/Sri Lanka {time_period} Bond Yield Historical Data.csv'
+
+    model_path = f'monthly/{time_period}.keras'
+    data_path = f'Data/Sri Lanka {time_period} Bond Yield Historical Data.csv'
     
     if os.path.exists(model_path) and os.path.exists(data_path):
         model = load_model(model_path)
@@ -52,6 +53,7 @@ def predict_future(model, data, time_step, future_steps):
     
     return predictions
 
+
 @app.route('/api', methods=['GET'])
 def get_predicts():
     return jsonify({'message': 'Welcome to the API'})
@@ -79,8 +81,11 @@ def predict():
         scaler = StandardScaler()
         scaled_data = scaler.fit_transform(data.values.reshape(-1, 1))
         #scaled_data = scaler.transform(data)
-        
-        predictions = predict_future(model, scaled_data, 15, 7)
+        if time_period == '5-Year':
+            time_step=10
+        else:
+            time_step=8
+        predictions = predict_future(model, scaled_data, time_step, 7)
         output = scaler.inverse_transform(np.array(predictions).reshape(-1, 1))
         output_list = output.tolist()
         
@@ -106,8 +111,11 @@ def predict_multiple():
         
             days_to_predict = (future_date - data.index[-1]).days
             months_to_predict = days_to_predict // 30 + 1
-        
-            predictions = predict_future(model, scaled_data, 15, months_to_predict)
+            if period == '5-Year':
+                time_step=10
+            else:
+                time_step=8
+            predictions = predict_future(model, scaled_data, time_step, months_to_predict)
             output = scaler.inverse_transform(np.array(predictions).reshape(-1, 1))
         
             results[period] = float(output[-1][0])

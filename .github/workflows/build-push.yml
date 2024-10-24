@@ -71,10 +71,15 @@ jobs:
           script: |
             # Login to Docker on EC2
             sudo docker login -u "${{secrets.DOCKER_LOGIN}}" -p "${{secrets.DOCKER_PASSWORD}}"
-            
-            # Pull latest Docker images from Docker Hub
-            sudo docker pull ${{secrets.DOCKER_LOGIN}}/treasury-tracker-backend:latest
-            sudo docker pull ${{secrets.DOCKER_LOGIN}}/treasury-tracker-model:latest
+
+            echo "Checking environment variables on EC2:"
+            echo "SECRET_KEY=${{ secrets.SECRET_KEY }}"
+            echo "PORT=${{ secrets.PORT }}"
+            echo "DB_URL=${{ secrets.DB_URL }}"
+            echo "DB_INTEREST_URL=${{ secrets.DB_INTEREST_URL }}"
+            echo "MODEL_URL=${{ secrets.MODEL_URL }}"
+            echo "APP_PASSWORD=${{ secrets.APP_PASSWORD }}"
+            echo "EMAIL=${{ secrets.EMAIL }}"
             
             # Stop and remove existing containers (if they exist)
             sudo docker stop treasury-tracker-backend || true
@@ -86,12 +91,20 @@ jobs:
             sudo docker rm $(sudo docker ps -a -q)
             sudo docker rmi $(sudo docker images -a -q)
             
+            # Pull latest Docker images from Docker Hub
+            sudo docker pull ${{secrets.DOCKER_LOGIN}}/treasury-tracker-backend:latest
+            sudo docker pull ${{secrets.DOCKER_LOGIN}}/treasury-tracker-model:latest
+            
+            
             # Run Backend container on port 5000
             sudo docker run -d --name treasury-tracker-backend \
             -e SECRET_KEY=${{ secrets.SECRET_KEY }} \
             -e PORT=${{ secrets.PORT }} \
             -e DB_URL=${{ secrets.DB_URL }} \
             -e DB_INTEREST_URL=${{ secrets.DB_INTEREST_URL }} \
+            -e MODEL_URL=${{ secrets.MODEL_URL }} \
+            -e APP_PASSWORD=${{ secrets.APP_PASSWORD }} \
+            -e EMAIL=${{ secrets.EMAIL }} \
             -p 5000:5000 \
             ${{ secrets.DOCKER_LOGIN }}/treasury-tracker-backend:latest
 

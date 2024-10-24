@@ -72,6 +72,15 @@ jobs:
             # Login to Docker on EC2
             sudo docker login -u "${{secrets.DOCKER_LOGIN}}" -p "${{secrets.DOCKER_PASSWORD}}"
 
+            echo "Checking environment variables on EC2:"
+            echo "SECRET_KEY=${{ secrets.SECRET_KEY }}"
+            echo "PORT=${{ secrets.PORT }}"
+            echo "DB_URL=${{ secrets.DB_URL }}"
+            echo "DB_INTEREST_URL=${{ secrets.DB_INTEREST_URL }}"
+            echo "MODEL_URL=${{ secrets.MODEL_URL }}"
+            echo "APP_PASSWORD=${{ secrets.APP_PASSWORD }}"
+            echo "EMAIL=${{ secrets.EMAIL }}"
+            
             # Stop and remove existing containers (if they exist)
             sudo docker stop treasury-tracker-backend || true
             sudo docker rm treasury-tracker-backend || true

@@ -15,6 +15,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DeleteDialog from "../components/DeleteDialog";
 import { blueGrey, blue } from "@mui/material/colors";
+import UpdateInvestmentDialog from "../components/UpdateInvestment";
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -36,19 +37,19 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: 0,
   },
 }));
-
+interface UserInvestment {
+  _id: string;
+  investmentName: string;
+  investmentType: string;
+  investmentAmount: string;
+  maturityPeriod: number;
+  expectedReturn: number;
+  investmentDate: string;
+  maturityDate: string;
+  interestRate: number;
+}
 const CustomizedTables = () => {
-  interface UserInvestment {
-    _id: string;
-    investmentName: string;
-    investmentType: string;
-    investmentAmount: string;
-    maturityPeriod: number;
-    expectedReturn: number;
-    investmentDate: string;
-    maturityDate: string;
-    interestRate: number;
-  }
+  
 
   const [userInvestments, setUserInvestments] = useState<
     UserInvestment[] | null
@@ -59,13 +60,20 @@ const CustomizedTables = () => {
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(0);
   const [openDelete, setOpenDelete] = useState(false);
+  const[editInvestment, setEditInvestment] = useState<any>(null);
   const [delInvestmentId, setDelInvestmentId] = useState('');
    const [rowsPerPage, setRowsPerPage] = useState(5);
+   const [updateInvestId, setUpdateInvsetId] = useState('');
+   const [editOpen, setEditOpen] = useState(false);
+   const [message, setMessage] = useState('');
+   const [editInvestmentId, setEditInvestmentId] = useState('');
   
   
     const handleChangePage = (event: unknown, newPage: number) => {
       setPage(newPage);
     };
+
+    
   
   
     const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -82,6 +90,44 @@ const CustomizedTables = () => {
       setOpenDelete(false);
     }
 
+    const handleEdit = async(investmentId: string)=>{
+      const data = await getUserInvestment(investmentId);
+      console.log(data);
+      setEditInvestment(data);
+      setUpdateInvsetId(investmentId);
+      setEditOpen(true);
+    }
+
+    const handleUpdate = (message:string)=>{
+      setMessage(message);
+    }
+
+    const getUserInvestment = async(id:string)=>{
+      try {
+        //setLoading(true);
+        const response = await fetch(process.env.NEXT_PUBLIC_API_URL + `/investment/getInvestment?id=${id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include",
+        });
+  
+        if (!response.ok) {
+          throw new Error("Failed to fetch investments");
+        }
+  
+        const data = await response.json();
+        return data[0];
+     
+  
+      } catch (error) {
+        console.error(error);
+  
+    } finally{
+      setLoading(false);
+    }
+  }
     
 
 
@@ -112,17 +158,24 @@ const CustomizedTables = () => {
     }
   };
 
+  const handleSuccessfulAdd = (message: string)=>{
+    setMessage(message);
+  }
+
   const handleButtonClick = () => {
     setOpen(true);
   };
 
   const handleDialogClose = () => {
     setOpen(false);
+    setEditOpen(false);
   };
 
   const hasError = (value:boolean)=>{
     setIsError(value);
   }
+
+  
 
   useEffect(() => {
     getUserInvestments();
@@ -151,12 +204,16 @@ const CustomizedTables = () => {
         onClose={handleDialogClose}
         refreshPage={getUserInvestments}
         errorHandle={hasError}
-
+        handleMessage={handleSuccessfulAdd}
+      
       />
+
+      {editOpen &&<UpdateInvestmentDialog open={editOpen} onClose={handleDialogClose} editInvestment={editInvestment} refreshPage={getUserInvestments} errorHandle={hasError} investmentId={updateInvestId} updateMessage={handleUpdate}/>}
+
       <DeleteDialog open={openDelete} handleClose={handleDeleteDialogClose} investmentId = {delInvestmentId} refreshPage={getUserInvestments}/>
       <Snackbar anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }} onClose={() => setIsError(undefined)} open={isError !== undefined} autoHideDuration={2000}>
         <Alert variant="filled" severity={isError? "error" :"success"}>
-          {isError ? " Investment Adding failed!" : "Investment Succesfully Added"}
+          {isError ? " Investment Adding failed!" : message}
         </Alert>
       </Snackbar>
       {loading ? (
@@ -217,15 +274,15 @@ const CustomizedTables = () => {
                     {new Date(investment.maturityDate).toLocaleDateString()}
                   </StyledTableCell>
                   <StyledTableCell align="right">
-                    <IconButton>
+                    <IconButton onClick={()=>handleEdit(investment._id)}>
                     <EditIcon/>
-
                     </IconButton>
                     <IconButton onClick={()=>handleDelete(investment._id)}>
                     <DeleteIcon htmlColor="red"/>
                     </IconButton>
                   </StyledTableCell>
                 </StyledTableRow>
+                
               ))}
             </TableBody>
           </Table>

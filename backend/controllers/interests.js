@@ -41,32 +41,27 @@ const getLastTwelveRecords = async (req, res) => {
   }
 };
 
-
-const getDates = async(req, res) =>{
-  try{
-    const distinctDates = await Interest.distinct('Date');
+const getDates = async (req, res) => {
+  try {
+    const distinctDates = await Interest.distinct("Date");
     const sortedDistinctDates = distinctDates
-      .map(date => new Date(date)) // Convert to Date objects
-      .sort((a, b) => b - a); 
+      .map((date) => new Date(date)) // Convert to Date objects
+      .sort((a, b) => b - a);
 
     return res.status(200).json(sortedDistinctDates);
-  } catch(error){
-    return res.status(404).send("Error Occurred")
+  } catch (error) {
+    return res.status(404).send("Error Occurred");
   }
-    
-}
-
-
-
+};
 
 const getYieldData = async (req, res) => {
   try {
     //const type = req.query.type;
     const date = req.query.date;
-   
-    const yieldData = await Interest.find({ Date: date})
-      .sort({ Date: -1 }).sort({Period:1}) // Sort by Date in descending order
 
+    const yieldData = await Interest.find({ Date: date })
+      .sort({ Date: -1 })
+      .sort({ Period: 1 }); // Sort by Date in descending order
 
     // Optional: Reverse the order to get them in chronological order
 
@@ -76,9 +71,6 @@ const getYieldData = async (req, res) => {
     return res.status(400).send("Error retrieving records");
   }
 };
-
-
-
 
 const answerQuestions = async (req, res) => {
   const { question } = req.body;
@@ -128,6 +120,6 @@ module.exports = {
   getLastTwelveRecords,
   answerQuestions,
   predict,
-  getDates, 
-  getYieldData
+  getDates,
+  getYieldData,
 };

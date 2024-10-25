@@ -132,7 +132,7 @@ const Home = () => {
                   Track Investments
                 </Typography>
                 <Typography color="white" paragraph>
-                  Easily monitor your treasury bills and bonds with real-time updates.
+                  Easily monitor your treasury bills and bonds and predictions.
                 </Typography>
               </Box>
             </motion.div>

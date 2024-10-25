@@ -230,14 +230,18 @@ const History = () => {
         </Grid>
          
         <Grid item xs={12} container justifyContent="center">
-          <DropDown
+          {
+            alignment == 'history' && <DropDown
             menuName="Investment Type"
             menuItems={treasuryType}
             onSelectChange={handleChange}
             disabled={false}
             resetKey={resetKey}
           />
-          <DropDown
+          }
+          
+          {
+            alignment === 'history' && <DropDown
             menuName="Period"
             menuItems={period}
             onSelectChange={handlePeriodChange}
@@ -245,7 +249,9 @@ const History = () => {
             resetKey={resetKey}
           
           />
-           <DropDown
+          }
+          {
+            alignment === 'yield' &&    <DropDown
             menuName="Date"
             menuItems={dates}
             onSelectChange={handleDateChange}
@@ -254,6 +260,8 @@ const History = () => {
           
           />
            
+          }
+         
         </Grid>
       </Grid>
       )

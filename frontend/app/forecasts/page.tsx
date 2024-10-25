@@ -21,7 +21,7 @@ const Forecast = () => {
   const [loading, setLoading] = useState(false);
  
 
-  const [alignment, setAlignment] = useState('web');
+  const [alignment, setAlignment] = useState('yield');
   const [dates, setDates] = useState([]);
   const [selectedDate, setSelectedDate] = useState('');
   const [resetKey, setResetKey] = useState(0);

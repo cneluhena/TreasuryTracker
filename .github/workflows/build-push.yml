@@ -88,6 +88,7 @@ jobs:
             sudo docker pull ${{secrets.DOCKER_LOGIN}}/treasury-tracker-backend:latest
             sudo docker pull ${{secrets.DOCKER_LOGIN}}/treasury-tracker-model:latest
             
+            sudo sleep 5  # Delay to ensure image is ready
             
             # Run Backend container on port 5000
             sudo docker run -d --name treasury-tracker-backend \

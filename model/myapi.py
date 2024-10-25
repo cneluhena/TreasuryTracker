@@ -16,8 +16,8 @@ scalers = {}
 
 def load_model_and_data(time_period):
 
-    model_path = f'monthly/{time_period}.keras'
-    data_path = f'Data/Sri Lanka {time_period} Bond Yield Historical Data.csv'
+    model_path = f'model/monthly/{time_period}.keras'
+    data_path = f'model/Data/Sri Lanka {time_period} Bond Yield Historical Data.csv'
     
     if os.path.exists(model_path) and os.path.exists(data_path):
         model = load_model(model_path)

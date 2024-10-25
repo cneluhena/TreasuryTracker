@@ -21,7 +21,7 @@ const Forecast = () => {
   const [loading, setLoading] = useState(false);
  
 
-  const [alignment, setAlignment] = useState('web');
+  const [alignment, setAlignment] = useState('yield');
   const [dates, setDates] = useState([]);
   const [selectedDate, setSelectedDate] = useState('');
   const [resetKey, setResetKey] = useState(0);
@@ -211,7 +211,8 @@ const Forecast = () => {
         </Grid>
          
         <Grid item xs={12} container justifyContent="center">
-          <DropDown
+          {
+            alignment === 'history' && <DropDown
             menuName="Investment Type"
             menuItems={treasuryType}
             onSelectChange={handleChange}
@@ -219,15 +220,20 @@ const Forecast = () => {
             resetKey={resetKey}
 
           />
-          <DropDown
-            menuName="Period"
-            menuItems={period}
-            onSelectChange={handlePeriodChange}
-            disabled={false}
-            resetKey={resetKey}
+          }
+          { 
+          alignment === 'history' && <DropDown
+          menuName="Period"
+          menuItems={period}
+          onSelectChange={handlePeriodChange}
+          disabled={false}
+          resetKey={resetKey}
 
-          />
-          <DropDown
+        />
+
+          }
+           {
+            alignment === 'yield' &&     <DropDown
             menuName="Date"
             menuItems={dates}
             onSelectChange={handleDateChange}
@@ -235,6 +241,8 @@ const Forecast = () => {
             resetKey={resetKey}
           
           />
+          }
+      
         </Grid>
       </Grid>
 

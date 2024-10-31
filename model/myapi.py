@@ -70,34 +70,30 @@ def get_history():
 
 @app.route('/predict', methods=['POST'])
 def predict():
-    try:
-        time_period = request.json.get('period', '3-Month')
-        if time_period not in models:
-            return jsonify({'error': 'Invalid time period'}), 400
-        
-        model = models[time_period]
-        data = data_dict[time_period]
-        #scaler = scalers[time_period]
-        scaler = StandardScaler()
-        scaled_data = scaler.fit_transform(data.values.reshape(-1, 1))
-        #scaled_data = scaler.transform(data)
-        if time_period == '5-Year':
-            time_step=10
-        else:
-            time_step=8
-        predictions = predict_future(model, scaled_data, time_step, 7)
-        output = scaler.inverse_transform(np.array(predictions).reshape(-1, 1))
-        output_list = output.tolist()
-        
-        future_dates = pd.date_range(start=data.index[-1], periods=7 + 1, freq='ME')[1:]
-        future_dates = future_dates.strftime('%Y-%m-%d').tolist()
-        predictions_with_dates = [{'date': date, 'interest': rate[0]} for date, rate in zip(future_dates, output_list)]
-        
-        return jsonify(predictions_with_dates)
+    time_period = request.json.get('period', '3-Month')
+    if time_period not in models:
+        return jsonify({'error': 'Invalid time period'}), 400
+    
+    model = models[time_period]
+    data = data_dict[time_period]
+    #scaler = scalers[time_period]
+    scaler = StandardScaler()
+    scaled_data = scaler.fit_transform(data.values.reshape(-1, 1))
+    #scaled_data = scaler.transform(data)
+    if time_period == '5-Year':
+        time_step=10
+    else:
+        time_step=8
+    predictions = predict_future(model, scaled_data, time_step, 7)
+    output = scaler.inverse_transform(np.array(predictions).reshape(-1, 1))
+    output_list = output.tolist()
+    
+    future_dates = pd.date_range(start=data.index[-1], periods=7 + 1, freq='ME')[1:]
+    future_dates = future_dates.strftime('%Y-%m-%d').tolist()
+    predictions_with_dates = [{'date': date, 'interest': rate[0]} for date, rate in zip(future_dates, output_list)]
+    
+    return jsonify(predictions_with_dates)
 
-    except Exception as e:
-        print(e.__traceback__)
-        return jsonify({'error': str(e)}), 500
 
 @app.route('/predict_multiple', methods=['POST'])
 def predict_multiple():

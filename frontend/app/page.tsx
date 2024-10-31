@@ -28,6 +28,11 @@ const Home = () => {
     router.push('/signup');
   };
 
+  const handleFinguide = () => {
+    window.open('https://niroshan2001-finguide-app-njjgad.streamlit.app/', '_blank');
+  };
+
+
   // Scroll Animation Variants
   const cardVariants = {
     hidden: { opacity: 0, y: 50 },
@@ -106,8 +111,11 @@ const Home = () => {
               >
                 Get Started
               </Button>
-              <Button variant="contained" color="primary" onClick={handleLogin}>
+              <Button variant="contained" sx={{ backgroundColor: 'red', color: 'white', mr: 2 }} onClick={handleLogin}>
                 Login
+              </Button>
+              <Button variant="contained"  sx={{ backgroundColor: '#00308F', color: 'white' }} onClick={handleFinguide}>
+                Finguide
               </Button>
             </Box>
           </motion.div>

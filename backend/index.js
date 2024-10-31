@@ -51,3 +51,16 @@ app.use((err, req, res, next) => {
     message: message,
   });
 });
+
+// const investmentsDue = await Investment.aggregate([
+//   {
+//     $match: {
+//       maturityDate: { $gte: today, $lt: threeDaysFromNow }
+//     }
+//   },
+//   {
+//     $group: {
+//       _id: "$userId" // Group by userId
+//     }
+//   }
+// ]);

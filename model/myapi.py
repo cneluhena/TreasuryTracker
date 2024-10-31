@@ -33,7 +33,7 @@ def load_model_and_data(time_period):
         
         return model, data, scaled_data, scaler
     else:
-        print(f'Model or data not found for {time_period}')
+        app.logger.info(f'Model or data not found for {time_period}')
         return None, None, None, None
 
 # Load models and data for different time periods

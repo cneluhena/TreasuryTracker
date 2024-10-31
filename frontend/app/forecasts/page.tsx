@@ -124,7 +124,7 @@ const Forecast = () => {
   const fetchYieldPredictions = async()=>{
     setLoading(true);
     try{
-      const response = await fetch(process.env.NEXT_PUBLIC_MODEL_URL + `/predict_multiple`, {
+      const response = await fetch(process.env.NEXT_PUBLIC_MODEL_URL + `/predict_multiple`, {    //https://treasury-tracker-frontend.vercel.app/model
         method: 'POST', // Specifies the HTTP method
         headers: {
           'Content-Type': 'application/json', 

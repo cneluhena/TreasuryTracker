@@ -66,7 +66,9 @@ const History = () => {
   const periodMap = {
     "3 months": 3, 
     "6 months": 6, 
-    "12 months" : 12
+    "12 months" : 12,
+    "2 years": 24,
+    "5 years": 60
   }
 
 

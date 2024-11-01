@@ -60,17 +60,17 @@ const History = () => {
   const billTimePeriods = ["3 months", "6 months", "12 months"];
   const bondTimePeriods = [
     "2 years",
-    "3 years",
-    "4 years",
+
     "5 years",
-    "6 years",
-    "10 years",
+    
   ];
 
   const periodMap = {
     "3 months": 3, 
     "6 months": 6, 
-    "12 months" : 12
+    "12 months" : 12,
+    "2 years": 24,
+    "5 years": 60
   }
 
 

@@ -29,7 +29,7 @@ const Forecast = () => {
   
   const [error, setError] = useState<string | null>(null);
   const billTimePeriods = ["3-Month", "6-Month", "1-Year"];
-  const bondTimePeriods = ["2-Year", "3-Year", "5-Year", "10-Year", "30-Year"];
+  const bondTimePeriods = ["2-Year", "5-Year"];
 
 
   const [series, setSeries] = useState<ForecastObject[]>([]);
@@ -124,7 +124,7 @@ const Forecast = () => {
   const fetchYieldPredictions = async()=>{
     setLoading(true);
     try{
-      const response = await fetch(process.env.NEXT_PUBLIC_MODEL_URL + `/predict_multiple`, {
+      const response = await fetch(process.env.NEXT_PUBLIC_MODEL_URL + `/predict_multiple`, {    //https://treasury-tracker-frontend.vercel.app/model
         method: 'POST', // Specifies the HTTP method
         headers: {
           'Content-Type': 'application/json', 

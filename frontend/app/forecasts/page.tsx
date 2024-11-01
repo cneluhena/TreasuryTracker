@@ -29,7 +29,7 @@ const Forecast = () => {
   
   const [error, setError] = useState<string | null>(null);
   const billTimePeriods = ["3-Month", "6-Month", "1-Year"];
-  const bondTimePeriods = ["2-Year", "3-Year", "5-Year", "10-Year", "30-Year"];
+  const bondTimePeriods = ["2-Year", "5-Year"];
 
 
   const [series, setSeries] = useState<ForecastObject[]>([]);
